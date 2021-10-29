@@ -27,7 +27,7 @@ Make clean
 
 ## Instruções de Execução:
 
-- Comando para executar o arquivo executável do projeto:
+- Comando para executar o arquivo do projeto:
 
 ```
 ./TrabalhoED2.exe
