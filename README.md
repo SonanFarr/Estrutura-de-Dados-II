@@ -7,8 +7,9 @@ sendo implementado em linguagem C++.
 ## Integrantes:
 
 ```
-
-
+Daniel Muller Rezende                   202065020AC      daniel.rezende@estudante.ufjf.br
+Délio Pereira Santos Barroso Amaro      201965202AC    
+Pedro Luiz Bonorino Braga               202065177A       pedro.bonorino@estudante.ufjf.br
 ```
 
 ## Instruções de Compilação:
