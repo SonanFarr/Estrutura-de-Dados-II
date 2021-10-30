@@ -4,7 +4,7 @@
 
 #
 # source files
-srcfiles 	:= $(wildcard *.cpp) $(wildcard Sources/*.cpp)
+srcfiles 	:= $(wildcard *.cpp) $(wildcard src/*.cpp)
 
 #
 # object files
