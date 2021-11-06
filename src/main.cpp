@@ -5,11 +5,9 @@ using namespace std;
 
 int main() {
 
-  cout << "Hello" << endl;
-
   Review* r = new Review();
 
-  r->teste();
+  r->iniciar();
   
   delete r; // don't remove this line (may cause memory leak)
 }

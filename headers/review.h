@@ -14,7 +14,7 @@ class Review{
     void acessaRegistro(int index); // imprime na tela
     void testeImportacao();
 
-    void teste();
+    void iniciar();
   private:
     
 };
