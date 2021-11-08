@@ -1,13 +1,38 @@
+#include <iostream>
+#include <fstream>
 #include "../headers/review.h"
 
 using namespace std;
 
 Review::Review(){
+  
+}
 
+Review::Review(string dir){
+  dirArq = dir;
 }
 
 Review::~Review(){
 
+}
+
+void Review::verificaDir(){
+  cout << "Iniciando verificação do diretório:" << endl;
+  cout << endl;
+
+  string dirReview = dirArq + "tiktok_app_reviews.bin";
+
+  ifstream reviewBin(dirReview, ios::in);
+
+  if(!reviewBin.is_open()){
+    cout << "O arquivo 'tiktok_app_reviews.bin' ainda não existe." << endl;
+    cout << "Iniciando processamento e criação do arquivo binário:" << endl;
+
+    processaReview();
+  }
+  else{
+    // Implementar as funções para acessar o arquivo binário e realizar as operações.
+  }
 }
 
 void Review::processaReview(){
