@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "../headers/review.h"
+#include "../headers/track.h"
 
 using namespace std;
 
@@ -50,8 +51,11 @@ void Review::acessaRegistro(int index){ // imprime na tela
 } 
 
 
-void Review::testeImportacao(){
+void Review::testeImportacao(ifstream *arqBin, ofstream *outFile){
   int escolha;
+  int limit;
+  int cont = 0;
+
   cout << "\nDigite:\n1 - Saída no console\n2 - Saída em arquivo" << endl;
   cin >> escolha;
 
@@ -62,8 +66,37 @@ void Review::testeImportacao(){
 
   if(escolha == 1){
     cout << "Saída no console (n = 10)" << endl;
+    limit = 10;
   } else {
     cout << "Saída em arquivo (n = 100)" << endl;
+    limit = 100;
+  }
+
+  string id = "";
+  string text = "";
+  int votes = 0;
+  string version = "";
+  string date = "";
+
+  Track *review = new Track(id, text, votes, version, date);
+
+  while(cont < limit){
+
+    
+
+    review->setReview_id(id);
+    review->setReview_text(text);
+    review->setUpvotes(votes);
+    review->setApp_version(version);
+    review->setPosted_date(date);
+
+    if(escolha == 1){
+      
+    }
+
+    if(escolha == 2){
+
+    }
   }
 }
 
@@ -98,7 +131,7 @@ void Review::iniciar(){
       cin >> i;
       acessaRegistro(i); // imprime na tela
     } else if (escolha == 2) {
-      testeImportacao();
+      //testeImportacao(); Descomentar essa linha depois.
     } else {
       continua = false;
     }
