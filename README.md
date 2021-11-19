@@ -32,7 +32,7 @@ Make clean
 - Comando para executar o arquivo do projeto:
 
 ```
-./TrabalhoED2.exe
+./TrabalhoED2.exe ./<repositório_do_arquivo>
 ```
 
 ## Etapas do Projeto:
