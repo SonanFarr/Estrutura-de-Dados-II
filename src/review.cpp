@@ -6,7 +6,6 @@
 #include <cstring>
 #include <ctime>
 #include <string.h>
-#include <random>
 #include "../headers/review.h"
 #include "../headers/track.h"
 
@@ -95,6 +94,8 @@ void Review::processaReview(){
 
   long int cont = 0;  // Contador para verificar a linha a ser lida.
 
+  // Para processar o .csv completamente, é necessário alterar o parâmetro do while
+  // para percorrer o arquivo por completo.
   while(arq1.good() && cont < 55000){
     // Ignorar a primeira linha do .csv.
     if(cont == 0){
@@ -174,6 +175,13 @@ void Review::acessaRegistro(fstream &arq, int index){
   cout << endl;
 }
 
+/**
+ * @brief          Função utilizada para escrever o registro no arquivo de saída.
+ * 
+ * @param arq      Arquivo binário para leitura.
+ * @param outFile  Arquivo de saída em formato .txt. 
+ * @param index    Indice para a cessar o registro.
+ */
 void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index){
   
   Track track = returnTrack(arq, index); // Criação do objeto track.
@@ -189,7 +197,13 @@ void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int i
   outFile << endl;
 }
 
-void Review::testeImportacao(fstream *arqBin, ofstream *outFile){
+/**
+ * @brief          Módulo de teste para escrita e acesso dos registros no arquivo binário.
+ * 
+ * @param arqBin   Arquivo binário para leitura.
+ * @param outFile  Arquivo de saída em modo .txt 
+ */
+void Review::testeImportacao(fstream &arqBin, ofstream &outFile){
   int escolha;
   int limit;
   int cont = 0;
@@ -207,20 +221,22 @@ void Review::testeImportacao(fstream *arqBin, ofstream *outFile){
     limit = 10;
 
     for(int i = 0; i < limit; i++) {
-      acessaRegistro( *arqBin, (rand() % ( 55000 - 1 ) ));
+      // Caso o arquivo .csv tenha sido processado por completo, é necessário alterar o intervalo da função rand
+      // para abrangir todos os registros.
+      acessaRegistro( arqBin, (rand() % ( 55000 - 1 ) ));
     }
     cout << endl;
   } else {
     cout << "\nSAÍDA EM ARQUIVO\n" << endl;
     limit = 100;
 
-    if(!arqBin->is_open()){
+    if(!arqBin.is_open()){
       cout << "ERRO: Arquivo não está aberto corretamente!" << endl;
       return; 
     } 
 
     for(int i = 0; i < limit; i++){
-      acessaRegistroEscreveArquivo(*arqBin, *outFile, (rand() % ( 55000 -1 ) ));
+      acessaRegistroEscreveArquivo(arqBin, outFile, (rand() % ( 55000 -1 ) ));
     }
     cout << "---------------------------------------------------------------------" << endl;
     cout << "Escrito no arquivo que está no mesmo diretório do arquivo .csv original!" << endl;
@@ -229,6 +245,11 @@ void Review::testeImportacao(fstream *arqBin, ofstream *outFile){
   }
 }
 
+/**
+ * @brief      Função que implementa o menu iniciar.
+ * 
+ * @param arq  Arquivo binário para leitura. 
+ */
 void Review::iniciar(fstream &arq){
 
   bool continua = true;
@@ -251,15 +272,15 @@ void Review::iniciar(fstream &arq){
       int i;
       cout << "\nDigite o índice do parâmetro" << endl;
       cin >> i;
-      acessaRegistro(arq, i); // imprime na tela
+      acessaRegistro(arq, i);
     } else if (escolha == 2) {
       ofstream outFile(dirArq+"/testeImportacao.txt");
-      testeImportacao(&arq, &outFile); //Descomentar essa linha depois.
+      testeImportacao(arq, outFile);
       outFile.close();
     } else {
       continua = false;
     }
-  } while (continua);  
+  } while (continua); 
 
 }
 
