@@ -21,7 +21,8 @@ class Review{
     void processaReview();
     void importaRegistros();
     void acessaRegistro(fstream &arq, int index); // imprime na tela
-    void testeImportacao(ifstream *arqBin, ofstream *outFile);
+    void acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index); // imprime no arquivo
+    void testeImportacao(fstream *arqBin, ofstream *outFile);
     void iniciar(fstream &arq);
   
 

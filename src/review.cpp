@@ -6,6 +6,7 @@
 #include <cstring>
 #include <ctime>
 #include <string.h>
+#include <random>
 #include "../headers/review.h"
 #include "../headers/track.h"
 
@@ -173,7 +174,22 @@ void Review::acessaRegistro(fstream &arq, int index){
   cout << endl;
 }
 
-void Review::testeImportacao(ifstream *arqBin, ofstream *outFile){
+void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index){
+  
+  Track track = returnTrack(arq, index); // Criação do objeto track.
+
+  outFile << "Imprimindo review selecionado: " << endl;
+  outFile << endl;
+  outFile << "Id: " << track.review_id << endl;
+  outFile << "Text: " << track.review_text << endl;
+  outFile << "UpVotes: " << track.upvotes << endl;
+  outFile << "Version: " << track.app_version << endl;
+  outFile << "Date: " << track.posted_date << endl;
+  outFile << "----------------------------------------------------------------" << endl;
+  outFile << endl;
+}
+
+void Review::testeImportacao(fstream *arqBin, ofstream *outFile){
   int escolha;
   int limit;
   int cont = 0;
@@ -187,11 +203,29 @@ void Review::testeImportacao(ifstream *arqBin, ofstream *outFile){
   }
 
   if(escolha == 1){
-    cout << "Saída no console (n = 10)" << endl;
+    cout << "\nSAÍDA NO CONSOLE\n" << endl;
     limit = 10;
+
+    for(int i = 0; i < limit; i++) {
+      acessaRegistro( *arqBin, (rand() % ( 55000 - 1 ) ));
+    }
+    cout << endl;
   } else {
-    cout << "Saída em arquivo (n = 100)" << endl;
+    cout << "\nSAÍDA EM ARQUIVO\n" << endl;
     limit = 100;
+
+    if(!arqBin->is_open()){
+      cout << "ERRO: Arquivo não está aberto corretamente!" << endl;
+      return; 
+    } 
+
+    for(int i = 0; i < limit; i++){
+      acessaRegistroEscreveArquivo(*arqBin, *outFile, (rand() % ( 55000 -1 ) ));
+    }
+    cout << "---------------------------------------------------------------------" << endl;
+    cout << "Escrito no arquivo que está no mesmo diretório do arquivo .csv original!" << endl;
+    cout << "---------------------------------------------------------------------\n" << endl;
+
   }
 }
 
@@ -219,7 +253,9 @@ void Review::iniciar(fstream &arq){
       cin >> i;
       acessaRegistro(arq, i); // imprime na tela
     } else if (escolha == 2) {
-      //testeImportacao(); Descomentar essa linha depois.
+      ofstream outFile(dirArq+"/testeImportacao.txt");
+      testeImportacao(&arq, &outFile); //Descomentar essa linha depois.
+      outFile.close();
     } else {
       continua = false;
     }
