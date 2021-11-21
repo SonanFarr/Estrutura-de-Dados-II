@@ -26,7 +26,7 @@ g++ *.cpp -o nomeDoExecutavel.exe
 - Comando para executar o arquivo do projeto, ainda dentro da pasta src:
 
 ```
-./nomeDoExecutavel.exe ./<repositório_do_arquivo>
+./nomeDoExecutavel.exe <repositório_do_arquivo>
 ```
 
 ## Etapas do Projeto:
