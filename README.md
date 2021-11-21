@@ -15,15 +15,21 @@ Thomás Sousa Causin Alves               201835040        thomas.causin@estudant
 
 ## Instruções de Compilação:
 
-- Criar arquivos .o e o arquivo ./TrabalhoED2.exe, dentro da pasta src:
+- Criar arquivos .o e o arquivo ./TrabalhoED2.exe:
 
 ```
-g++ *.cpp -o nomeDoExecutavel.exe
+Make
+```
+
+- Deletar arquivos .o e o arquivo ./TrabalhoED2.exe:
+
+```
+Make clean
 ```
 
 ## Instruções de Execução:
 
-- Comando para executar o arquivo do projeto, ainda dentro da pasta src:
+- Comando para executar o arquivo do projeto:
 
 ```
 ./nomeDoExecutavel.exe <repositório_do_arquivo>
