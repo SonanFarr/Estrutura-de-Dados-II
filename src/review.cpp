@@ -164,7 +164,6 @@ void Review::acessaRegistro(fstream &arq, int index){
   
   Track track = returnTrack(arq, index); // Criação do objeto track.
 
-  cout << "Imprimindo review selecionado: " << endl;
   cout << endl;
   cout << "Id: " << track.review_id << endl;
   cout << "Text: " << track.review_text << endl;
@@ -186,7 +185,6 @@ void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int i
   
   Track track = returnTrack(arq, index); // Criação do objeto track.
 
-  outFile << "Imprimindo review selecionado: " << endl;
   outFile << endl;
   outFile << "Id: " << track.review_id << endl;
   outFile << "Text: " << track.review_text << endl;
@@ -203,7 +201,7 @@ void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int i
  * @param arqBin   Arquivo binário para leitura.
  * @param outFile  Arquivo de saída em modo .txt 
  */
-void Review::testeImportacao(fstream &arqBin, ofstream &outFile){
+void Review::testeImportacao(fstream &arqBin){
   int escolha;
   int limit;
   int cont = 0;
@@ -217,7 +215,7 @@ void Review::testeImportacao(fstream &arqBin, ofstream &outFile){
   }
 
   if(escolha == 1){
-    cout << "\nSAÍDA NO CONSOLE\n" << endl;
+    cout << "\n-> SAÍDA NO CONSOLE <-\n" << endl;
     limit = 10;
 
     for(int i = 0; i < limit; i++) {
@@ -227,21 +225,22 @@ void Review::testeImportacao(fstream &arqBin, ofstream &outFile){
     }
     cout << endl;
   } else {
-    cout << "\nSAÍDA EM ARQUIVO\n" << endl;
+    cout << "\n -> SAÍDA EM ARQUIVO <-\n" << endl;
     limit = 100;
+    ofstream outFile(dirArq+"/testeImportacao.txt");
 
-    if(!arqBin.is_open()){
-      cout << "ERRO: Arquivo não está aberto corretamente!" << endl;
+    if(!arqBin.is_open() || !outFile.is_open()){
+      cout << "ERRO: Um dos arquivos não está aberto corretamente!" << endl;
       return; 
     } 
 
     for(int i = 0; i < limit; i++){
       acessaRegistroEscreveArquivo(arqBin, outFile, (rand() % ( 55000 -1 ) ));
     }
-    cout << "---------------------------------------------------------------------" << endl;
+    cout << "------------------------------------------------------------------------" << endl;
     cout << "Escrito no arquivo que está no mesmo diretório do arquivo .csv original!" << endl;
-    cout << "---------------------------------------------------------------------\n" << endl;
-
+    cout << "------------------------------------------------------------------------\n" << endl;
+    outFile.close();
   }
 }
 
@@ -274,9 +273,7 @@ void Review::iniciar(fstream &arq){
       cin >> i;
       acessaRegistro(arq, i);
     } else if (escolha == 2) {
-      ofstream outFile(dirArq+"/testeImportacao.txt");
-      testeImportacao(arq, outFile);
-      outFile.close();
+      testeImportacao(arq);
     } else {
       continua = false;
     }

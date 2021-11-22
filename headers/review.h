@@ -22,7 +22,7 @@ class Review{
     void importaRegistros();
     void acessaRegistro(fstream &arq, int index); // imprime na tela
     void acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index); // imprime no arquivo
-    void testeImportacao(fstream &arqBin, ofstream &outFile);
+    void testeImportacao(fstream &arqBin);
     void iniciar(fstream &arq);
   
 
