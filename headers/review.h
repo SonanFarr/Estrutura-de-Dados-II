@@ -18,12 +18,12 @@ class Review{
     void verificaDir();  // Função para verificar a existência do arquivo binário no diretório.
 
     // Funções principais -----------------------------------------------
-    void processaReview();
+    void processaReview(int limit);
     void importaRegistros();
     void acessaRegistro(fstream &arq, int index); // imprime na tela
     void acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index); // imprime no arquivo
-    void testeImportacao(fstream &arqBin);
-    void iniciar(fstream &arq);
+    void testeImportacao(fstream &arqBin, int intervalo);
+    void iniciar(fstream &arq, int limit);
   
 
     // Funções Auxiliares -----------------------------------------------
