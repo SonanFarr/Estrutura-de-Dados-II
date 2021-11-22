@@ -32,29 +32,62 @@ void Review::verificaDir(){
   cout << "Iniciando verificação do diretório:" << endl;
   cout << endl;
 
+  int escolha;
+  int limit;
+
   string dirReview = dirArq + "/tiktok_app_reviews.bin";
 
   ifstream reviewBin(dirReview, ios::in);
 
   // Se o arquivo tiktok_app_reviews.bin não existe, inicia-se o processamento do tiktok_app_reviews.csv.
   if(!reviewBin.is_open()){
+
     cout << "O arquivo 'tiktok_app_reviews.bin' ainda não existe." << endl;
     cout << "Iniciando processamento e criação do arquivo binário:" << endl;
+    cout << endl;
+    cout << "Digite:" << endl;
+    cout << "  - 1: Para processar o arquivo inteiro." << endl;
+    cout << "  - 2: Para processar apenas uma parte do arquivo (55000 primeiras linhas)." << endl;
+    cout << "Escolha: " << endl;
+    cin >> escolha;
 
-    processaReview();  // Chamada da função de processamento do arquivo .csv.
+    if(escolha == 1){
+      limit = 3660724;
+    }
+    else{
+      limit = 55000;
+    }
+
+    processaReview(limit);  // Chamada da função de processamento do arquivo .csv.
 
     fstream arq(dirArq+"/tiktok_app_reviews.bin", ios::in | ios::binary);  // Abertura do arquivo .bin para leitura.
     arq.seekg(0);  // Posicionando o ponteiro do arquivo no primeiro byte.
-    iniciar(arq);  // Chamada do menu iniciar.
+    iniciar(arq, limit);  // Chamada do menu iniciar.
     arq.close();   // Fechando arquivo .bin.
   }
   // Caso contrário, abre o arquivo binário e segue para a próxima etapa.
   else{
     cout << "O arquivo 'tiktok_app_reviews.bin' já existe." << endl;
 
+    cout << "Defina o intervalo de acesso aos registros:" << endl;
+    cout << "  - 1: Para o arquivo inteiro." << endl;
+    cout << "  - 2: Para apenas uma parte do arquivo (55000 primeiros registros)." << endl;
+    cout << endl;
+    cout << "Atenção: Caso defina o intervalo para o arquivo inteiro e ele não tenha sido processado por completo," << endl;
+    cout << "poderá haver corrupção nas informações exibidas." << endl;
+    cout << "Escolha: " << endl;
+    cin >> escolha;
+
+    if(escolha == 1){
+      limit = 3660724;
+    }
+    else{
+      limit = 55000;
+    }
+
     fstream arq(dirArq+"/tiktok_app_reviews.bin", ios::in | ios::binary);  // Abertura do arquivo .bin para leitura.
     arq.seekg(0);  // Posicionando o ponteiro do arquivo no primeiro byte.
-    iniciar(arq);  // Chamada do menu iniciar.
+    iniciar(arq, limit);  // Chamada do menu iniciar.
     arq.close();   // Fechando arquivo .bin.
   }
 }
@@ -63,7 +96,7 @@ void Review::verificaDir(){
  * @brief  Função utilizada para fazer o processamento do arquivo .csv
  * 
  */
-void Review::processaReview(){
+void Review::processaReview(int limit){
   cout << "Iniciando processamento do arquivo .csv:" << endl;
 
   string dirReview = dirArq + "/tiktok_app_reviews.csv";
@@ -96,7 +129,7 @@ void Review::processaReview(){
 
   // Para processar o .csv completamente, é necessário alterar o parâmetro do while
   // para percorrer o arquivo por completo.
-  while(arq1.good() && cont < 55000){
+  while(arq1.good() && cont < limit){
     // Ignorar a primeira linha do .csv.
     if(cont == 0){
       getline(arq1, line);
@@ -161,7 +194,7 @@ void Review::importaRegistros(){
  * @param index  Índice especificado pelo usuário.
  */
 void Review::acessaRegistro(fstream &arq, int index){
-  
+
   Track track = returnTrack(arq, index); // Criação do objeto track.
 
   cout << endl;
@@ -201,7 +234,7 @@ void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int i
  * @param arqBin   Arquivo binário para leitura.
  * @param outFile  Arquivo de saída em modo .txt 
  */
-void Review::testeImportacao(fstream &arqBin){
+void Review::testeImportacao(fstream &arqBin, int intervalo){
   int escolha;
   int limit;
   int cont = 0;
@@ -219,9 +252,7 @@ void Review::testeImportacao(fstream &arqBin){
     limit = 10;
 
     for(int i = 0; i < limit; i++) {
-      // Caso o arquivo .csv tenha sido processado por completo, é necessário alterar o intervalo da função rand
-      // para abrangir todos os registros.
-      acessaRegistro( arqBin, (rand() % ( 55000 - 1 ) ));
+      acessaRegistro( arqBin, (rand() % ( intervalo - 1 ) ));
     }
     cout << endl;
   } else {
@@ -235,7 +266,7 @@ void Review::testeImportacao(fstream &arqBin){
     } 
 
     for(int i = 0; i < limit; i++){
-      acessaRegistroEscreveArquivo(arqBin, outFile, (rand() % ( 55000 -1 ) ));
+      acessaRegistroEscreveArquivo(arqBin, outFile, (rand() % ( intervalo -1 ) ));
     }
     cout << "------------------------------------------------------------------------" << endl;
     cout << "Escrito no arquivo que está no mesmo diretório do arquivo .csv original!" << endl;
@@ -249,7 +280,7 @@ void Review::testeImportacao(fstream &arqBin){
  * 
  * @param arq  Arquivo binário para leitura. 
  */
-void Review::iniciar(fstream &arq){
+void Review::iniciar(fstream &arq, int limit){
 
   bool continua = true;
 
@@ -269,11 +300,13 @@ void Review::iniciar(fstream &arq){
 
     if(escolha == 1){
       int i;
-      cout << "\nDigite o índice do parâmetro" << endl;
-      cin >> i;
+      do{
+        cout << "\nDigite um índice válido para acessar o registro:" << endl;
+        cin >> i;
+      }while(i<=0 || i>limit);
       acessaRegistro(arq, i);
     } else if (escolha == 2) {
-      testeImportacao(arq);
+      testeImportacao(arq, limit);
     } else {
       continua = false;
     }
