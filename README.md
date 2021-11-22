@@ -30,9 +30,10 @@ Make clean
 ## Instruções de Execução:
 
 - Comando para executar o arquivo do projeto:
+- Necessário especificar o caminho do diretório onde se encontra o arquivo a ser processado.
 
 ```
-./nomeDoExecutavel.exe <repositório_do_arquivo>
+./nomeDoExecutavel.exe ./<repositório_do_arquivo>
 ```
 
 ## Etapas do Projeto:
