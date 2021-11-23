@@ -33,7 +33,7 @@ Make clean
 - Necessário especificar o caminho do diretório onde se encontra o arquivo a ser processado.
 
 ```
-./nomeDoExecutavel.exe ./<repositório_do_arquivo>
+./TrabalhoED2.exe ./<repositório_do_arquivo>
 ```
 
 ## Etapas do Projeto:
