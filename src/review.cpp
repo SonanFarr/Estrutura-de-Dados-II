@@ -388,3 +388,20 @@ Track Review::returnTrack(fstream &arq, int index){
     return track;
   }
 }
+
+/**
+ * @brief         Função para criar um vetor com n tracks aleatórias.
+ * 
+ * @param arq     Arquivo do qual será lido os registros.
+ * @param n       Tamanho do vetor a ser criado.
+ * @return Track  Vetor de tracks criado.
+ */
+Track Review::criaVetorTrack(fstream &arq, int n){
+  Track *vet;
+
+  for(int i=0; i<n; i++){
+    vet[i] = returnTrack(arq, (rand() % ( sizeof(arq) - 1 ) ));
+  }
+
+  return *vet;
+}
