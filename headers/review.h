@@ -30,6 +30,7 @@ class Review{
     void escreveTrack(fstream &arq, Track track);
     void criaTrack(fstream &arq, char id[], char text[], char votes[], char version[], char date[]);
     Track returnTrack(fstream &arq, int index);
+    Track criaVetorTrack(fstream &arq, int n);
 
   private:
     string dirArq;       // String para armazenar o diretório do arquivo.
