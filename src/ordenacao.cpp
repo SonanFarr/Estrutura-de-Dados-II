@@ -1,8 +1,11 @@
 #include <iostream>
 #include <chrono>
 #include <cstdlib>
+#include <string.h>
+#include <cstring>
 #include <string>
 #include "../headers/ordenacao.h"
+#include "../headers/review.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -12,7 +15,7 @@ Ordenacao::Ordenacao(){
 }
 
 Ordenacao::Ordenacao(int tamanho) {
-  array = new int [tamanho];
+  array = new Track [tamanho];
   setTamanho(tamanho);
   criaAleatorio();
   imprimeArray();
@@ -30,16 +33,16 @@ int Ordenacao::getTamanho() {
   return this->tamanho;
 }
 
-void Ordenacao::criaAleatorio() {
-  for(int i = 0; i < getTamanho(); i++) {
-    array[i] = rand() % getTamanho() * 2;
-  }
-}
+//void Ordenacao::criaAleatorio() {
+  //for(int i = 0; i < getTamanho(); i++) {
+    //array[i] = rand() % getTamanho() * 2;
+  //}
+//}
 
 void Ordenacao::imprimeArray() {
   for(int i = 0; i < getTamanho(); i++) {
-        cout << array[i] << " ";
-    }
+    cout << array[i].upvotes << " ";
+  }
     cout << endl;
 }
 
@@ -49,7 +52,7 @@ void Ordenacao::selectionSort() {
   for(int i = 0; i < this->tamanho-1; i++) {
     int min = i;
     for(int j = i + 1; j < this->tamanho; j++) {
-      if(array[j] < array[min]) 
+      if(array[j].upvotes < array[min].upvotes) 
         min = j;
     }
     //troca(array[i], array[min]); Necessário fazer a adaptação para a ordenação das tracks.
@@ -69,6 +72,42 @@ void Ordenacao::heapSort(Track *v, int n){
     heapSortRec(v, n);
     high_resolution_clock::time_point fim = high_resolution_clock::now();
     cout << duration_cast<duration<double>>(fim - inicio).count() << " segundos" << endl;
+}
+
+// Funções de medida de desempenho ---------------------------------------------------------------------
+
+/**
+ * @brief      Função principal para teste de desempenho dos algorítimos de ordenação.
+ * 
+ * @param arq  Arquivo binário para leitura dos registros.
+ * @param n    Tamanho do vetor a ser criado. 
+ */
+void Ordenacao::medeDesempenho(fstream &arq, int n){
+  int m = 3;
+
+  Track *vet;
+  Review r;
+
+  for(int i=0; i<m; i++){
+    r.criaVetorTrack(arq, vet, n);
+    
+    cout << "Vetor criado: " << endl;
+    cout << "[";
+    for(int i=0; i<n-1; i++){
+      cout << vet[i].upvotes << ", ";
+    }
+    cout << vet[n-1].upvotes << "]";
+
+    heapSort(vet, n);
+
+    cout << "Vetor ordenado: " << endl;
+    cout << "[";
+    for(int i=0; i<n-1; i++){
+      cout << vet[i].upvotes << ", ";
+    }
+    cout << vet[n-1].upvotes << "]";
+  }
+
 }
 
 // Funções Auxiliares ----------------------------------------------------------------------------------

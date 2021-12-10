@@ -285,10 +285,15 @@ void Review::iniciar(fstream &arq, int limit){
   bool continua = true;
 
   do{
-    cout << "Digite uma das opções abaixo: " << endl;
-    cout << "1 - Acessar Registro" << endl;
-    cout << "2 - Testar Importação" << endl;
-    cout << "3 - Sair do programa" << endl;
+    cout << "Digite uma das opções abaixo:" << endl;
+    cout << "  Operações da etapa 1: " << endl;
+    cout << "    1 - Acessar Registro" << endl;
+    cout << "    2 - Testar Importação" << endl;
+    cout << "  Operações da etapa 2: " << endl;
+    cout << "    3 - Ordenação" << endl;
+    cout << "    4 - Hash" << endl;
+    cout << "    5 - Módulo de Teste" << endl;
+    cout << "  6 - Sair do Programa" << endl;
     
     int escolha;
     cin >> escolha;
@@ -307,7 +312,13 @@ void Review::iniciar(fstream &arq, int limit){
       acessaRegistro(arq, i);
     } else if (escolha == 2) {
       testeImportacao(arq, limit);
-    } else {
+    } else if (escolha == 3){
+
+    } else if (escolha == 4){
+
+    } else if (escolha == 5){
+
+    } else{
       continua = false;
     }
   } while (continua); 
@@ -396,12 +407,11 @@ Track Review::returnTrack(fstream &arq, int index){
  * @param n       Tamanho do vetor a ser criado.
  * @return Track  Vetor de tracks criado.
  */
-Track Review::criaVetorTrack(fstream &arq, int n){
-  Track *vet;
+void Review::criaVetorTrack(fstream &arq, Track *vet, int n){
+  int sizeByte = sizeof(arq)/sizeof(Track);
 
   for(int i=0; i<n; i++){
-    vet[i] = returnTrack(arq, (rand() % ( sizeof(arq) - 1 ) ));
+    vet[i] = returnTrack(arq, (rand() % ( sizeByte - 1 ) ));
   }
 
-  return *vet;
 }
