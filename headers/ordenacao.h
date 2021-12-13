@@ -29,10 +29,14 @@ class Ordenacao{
     void heapSortRec(Track *vet, int n);
 
     //? Algorítimos de Ordenação -------------------------------------------
-    void heapSort(Track *vet, int n);
+    void heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
 
     //? Função de medida de Desempenho -------------------------------------
-    void medeDesempenho(fstream &arq, int n);
+    void medeDesempenho(string dir, fstream &arq, int n);
+
+    //? Variaveis Auxiliares -----------------------------------------------
+    long int comparacoes = 0;
+    long int trocas = 0;
 
   private:
 
