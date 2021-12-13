@@ -8,6 +8,7 @@
 #include <string.h>
 #include "../headers/review.h"
 #include "../headers/track.h"
+#include "../headers/ordenacao.h"
 
 using namespace std;
 
@@ -121,7 +122,7 @@ void Review::processaReview(int limit){
   // Vetores de char para fazer a criação do objeto do tipo Track.
   char id[100];
   char text[2000];
-  char votes[5];
+  int votes;
   char version[7];
   char date[20];
 
@@ -165,7 +166,14 @@ void Review::processaReview(int limit){
     // Armazenando as informações das strings nos vetores de char correspondentes para a criação da track.
     strcpy(id, idAux.c_str());
     strcpy(text, textAux.c_str());
-    strcpy(votes, votesAux.c_str());
+
+    try{
+      votes = stoi(votesAux);
+    }
+    catch(const exception& e){
+      votes = 0;
+    }
+    
     strcpy(version, versionAux.c_str());
     strcpy(date, dateAux.c_str());
 
@@ -298,7 +306,7 @@ void Review::iniciar(fstream &arq, int limit){
     int escolha;
     cin >> escolha;
 
-    while(escolha < 1 || escolha > 3){
+    while(escolha < 1 || escolha > 6){
       cout << "Digite uma opção válida:\n1 - Acessar Registro\n2 - Testar Importação\n3 - Sair do programa" << endl;
       cin >> escolha;
     }
@@ -310,17 +318,31 @@ void Review::iniciar(fstream &arq, int limit){
         cin >> i;
       }while(i<=0 || i>limit);
       acessaRegistro(arq, i);
-    } else if (escolha == 2) {
-      testeImportacao(arq, limit);
-    } else if (escolha == 3){
-
-    } else if (escolha == 4){
-
-    } else if (escolha == 5){
-
-    } else{
-      continua = false;
     }
+    else{
+      if(escolha == 2){
+        testeImportacao(arq, limit);
+      }
+      else{
+        if(escolha == 3){
+          Ordenacao *o;
+          o->medeDesempenho(arq, 10);
+        }
+        else{
+          if(escolha == 4){
+
+          }
+          else{
+            if(escolha == 5){
+
+            }
+            else{
+              continua = false;
+            }
+          }
+        }
+      }
+    } 
   } while (continua); 
 
 }
@@ -354,14 +376,14 @@ void Review::escreveTrack(fstream &arq, Track track){
  * @param version  Versão do app.
  * @param date     Data da postagem.
  */
-void Review::criaTrack(fstream &arq, char id[], char text[], char votes[], char version[], char date[]){
+void Review::criaTrack(fstream &arq, char id[], char text[], int votes, char version[], char date[]){
   try{
     Track track;
 
     // Armazenando os valores passados como parâmetro nos campos da track.
     strcpy(track.review_id, id);
     strcpy(track.review_text, text);
-    strcpy(track.upvotes, votes);
+    track.upvotes = votes;
     strcpy(track.app_version, version);
     strcpy(track.posted_date, date);
 
@@ -398,20 +420,4 @@ Track Review::returnTrack(fstream &arq, int index){
 
     return track;
   }
-}
-
-/**
- * @brief         Função para criar um vetor com n tracks aleatórias.
- * 
- * @param arq     Arquivo do qual será lido os registros.
- * @param n       Tamanho do vetor a ser criado.
- * @return Track  Vetor de tracks criado.
- */
-void Review::criaVetorTrack(fstream &arq, Track *vet, int n){
-  int sizeByte = sizeof(arq)/sizeof(Track);
-
-  for(int i=0; i<n; i++){
-    vet[i] = returnTrack(arq, (rand() % ( sizeByte - 1 ) ));
-  }
-
 }
