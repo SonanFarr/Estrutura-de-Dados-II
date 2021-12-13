@@ -19,16 +19,20 @@ class Ordenacao{
     Ordenacao();
     ~Ordenacao();
 
+    //? Funções Auxiliares Gerais ------------------------------------------
     void troca(Track &a, Track &b);
+    Track *criaVetorTrack(fstream &arq, int n);
+
+    //? Funções Auxiliares HeapSort ----------------------------------------
     void heapify(Track *vet, int i, int n);
     void constroiHeap(Track *vet, int n);
     void heapSortRec(Track *vet, int n);
 
+    //? Algorítimos de Ordenação -------------------------------------------
     void heapSort(Track *vet, int n);
 
+    //? Função de medida de Desempenho -------------------------------------
     void medeDesempenho(fstream &arq, int n);
-
-    Track *criaVetorTrack(fstream &arq, int n);
 
   private:
 
