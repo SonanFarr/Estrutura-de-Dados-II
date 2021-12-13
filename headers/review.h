@@ -28,9 +28,9 @@ class Review{
 
     // Funções Auxiliares -----------------------------------------------
     void escreveTrack(fstream &arq, Track track);
-    void criaTrack(fstream &arq, char id[], char text[], char votes[], char version[], char date[]);
+    void criaTrack(fstream &arq, char id[], char text[], int votes, char version[], char date[]);
     Track returnTrack(fstream &arq, int index);
-    void criaVetorTrack(fstream &arq, Track *vet, int n);
+    Track *criaVetorTrack(fstream &arq, int n);
 
   private:
     string dirArq;       // String para armazenar o diretório do arquivo.

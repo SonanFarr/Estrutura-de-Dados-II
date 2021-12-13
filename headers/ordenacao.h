@@ -17,33 +17,21 @@ using namespace std;
 class Ordenacao{
   public:
     Ordenacao();
-    Ordenacao(int tamanho);
     ~Ordenacao();
 
-    // Funções importantes
-    void criaAleatorio();
-    void imprimeArray();
+    void troca(Track &a, Track &b);
+    void heapify(Track *vet, int i, int n);
+    void constroiHeap(Track *vet, int n);
+    void heapSortRec(Track *vet, int n);
 
-    // Getters e Setters
-    void setTamanho(int tamanho);
-    int getTamanho();
+    void heapSort(Track *vet, int n);
 
-    // Ordenacoes
-    void selectionSort();
-    void heapSort(Track *v, int n);
-
-    // Medida de Desempenho
     void medeDesempenho(fstream &arq, int n);
 
-    // Funções auxiliares
-    void troca(Track &a, Track &b);
-    void heapify(Track *v, int i, int n);
-    void constroiHeap(Track *v, int n);
-    void heapSortRec(Track *v, int n);
+    Track *criaVetorTrack(fstream &arq, int n);
 
   private:
-    Track *array;
-    int tamanho;
+
 
 };
 
