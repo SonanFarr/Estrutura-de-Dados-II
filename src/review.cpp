@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//? Constructors ------------------------------------------------------------------------------
 Review::Review(){
   
 }
@@ -20,10 +21,12 @@ Review::Review(string dir){
   dirArq = dir;
 }
 
+//? Destructor --------------------------------------------------------------------------------
 Review::~Review(){
 
 }
 
+//? Funções de Processamento ------------------------------------------------------------------
 /**
  * @brief  Função responsável por entrar no repositório passado como argumento da main 
  *         e verificar a existência do arquivo tiktok_app_reviews.bin.
@@ -190,6 +193,7 @@ void Review::processaReview(int limit){
   cout << endl;
 }
 
+//? Operações Principais ----------------------------------------------------------------------
 void Review::importaRegistros(){
   cout << "Importa os registros do arquivo" << endl;
 }
@@ -236,6 +240,7 @@ void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int i
   outFile << endl;
 }
 
+//? Módulo de Teste --------------------------------------------------------------------------
 /**
  * @brief          Módulo de teste para escrita e acesso dos registros no arquivo binário.
  * 
@@ -283,6 +288,7 @@ void Review::testeImportacao(fstream &arqBin, int intervalo){
   }
 }
 
+//? Menu Iniciar -----------------------------------------------------------------------------
 /**
  * @brief      Função que implementa o menu iniciar.
  * 
@@ -347,6 +353,8 @@ void Review::iniciar(fstream &arq, int limit){
 
 }
 
+
+//? Funções Auxiliares -----------------------------------------------------------------------
 /**
  * @brief        Função utilizada para escrever a track no arquivo binário.
  * 
@@ -364,7 +372,6 @@ void Review::escreveTrack(fstream &arq, Track track){
     arq.write(reinterpret_cast<const char*>(&track), sizeof(Track));  // Realiza a escrita da track no arquivo binário.
   }
 }
-
 
 /**
  * @brief          Função responsável por criar o objeto do tipo Track.

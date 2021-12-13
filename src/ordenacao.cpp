@@ -14,8 +14,17 @@ using namespace std::chrono;
 
 using namespace std;
 
-// Funções Auxiliares ----------------------------------------------------------------------------------
+//? Constructor ------------------------------------------------------------------------------------------------
+Ordenacao::Ordenacao(){
 
+}
+
+//? Destructor -------------------------------------------------------------------------------------------------
+Ordenacao::~Ordenacao(){
+
+}
+
+//? Funções Auxiliares Gerais ----------------------------------------------------------------------------------
 /**
  * @brief    Função auxiliar para trocar a posição entre dois elementos.
  * 
@@ -28,6 +37,54 @@ void Ordenacao::troca(Track &a, Track &b) {
   b = aux;
 }
 
+/**
+ * @brief         Função para criar um vetor com n tracks aleatórias.
+ * 
+ * @param arq     Arquivo do qual será lido os registros.
+ * @param n       Tamanho do vetor a ser criado.
+ * @return Track  Vetor de tracks criado.
+ */
+Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
+  
+  if(!arq.is_open()){
+    cout << "ERRO: Arquivo não foi aberto corretamente." << endl;
+
+    return NULL;
+  }
+  else{
+
+    Track *vet = new Track[n];
+    Review r;
+
+    //srand(time(NULL));
+
+    int limit = sizeof(arq)/sizeof(Track);
+    int indice;
+
+    for(int i=0; i<n; i++){
+      indice = rand()%5000;
+      vet[i] = r.returnTrack(arq, indice);
+    }
+
+    return vet;
+  }
+}
+
+//void criaAleatorio() {
+  //for(int i = 0; i < getTamanho(); i++) {
+    //array[i] = rand() % getTamanho() * 2;
+  //}
+//}
+
+//void imprimeArray() {
+  //for(int i = 0; i < getTamanho(); i++) {
+    //cout << array[i].upvotes << " ";
+  //}
+    //cout << endl;
+//}
+
+
+//? Funções Auxiliares HeapSort --------------------------------------------------------------------------------
 /**
  * @brief    Função auxiliar para manipulação da heap.
  * 
@@ -82,20 +139,7 @@ void Ordenacao::heapSortRec(Track *vet, int n){
     }
 }
 
-//void criaAleatorio() {
-  //for(int i = 0; i < getTamanho(); i++) {
-    //array[i] = rand() % getTamanho() * 2;
-  //}
-//}
-
-//void imprimeArray() {
-  //for(int i = 0; i < getTamanho(); i++) {
-    //cout << array[i].upvotes << " ";
-  //}
-    //cout << endl;
-//}
-
-// Algorítimos de Ordenação ----------------------------------------------------------------------------
+//? Algorítimos de Ordenação ------------------------------------------------------------------------------------
 
 //void selectionSort() {
   //for(int i = 0; i < this->tamanho-1; i++) {
@@ -123,7 +167,7 @@ void Ordenacao::heapSort(Track *vet, int n){
     cout << duration_cast<duration<double>>(fim - inicio).count() << " segundos" << endl;
 }
 
-// Funções de medida de desempenho ---------------------------------------------------------------------
+//? Função de medida de desempenho ------------------------------------------------------------------------------
 
 /**
  * @brief      Função principal para teste de desempenho dos algorítimos de ordenação.
@@ -154,37 +198,4 @@ void Ordenacao::medeDesempenho(fstream &arq, int n){
     delete[] vet;
   }
 
-}
-
-/**
- * @brief         Função para criar um vetor com n tracks aleatórias.
- * 
- * @param arq     Arquivo do qual será lido os registros.
- * @param n       Tamanho do vetor a ser criado.
- * @return Track  Vetor de tracks criado.
- */
-Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
-  
-  if(!arq.is_open()){
-    cout << "ERRO: Arquivo não foi aberto corretamente." << endl;
-
-    return NULL;
-  }
-  else{
-
-    Track *vet = new Track[n];
-    Review r;
-
-    //srand(time(NULL));
-
-    int limit = sizeof(arq)/sizeof(Track);
-    int indice;
-
-    for(int i=0; i<n; i++){
-      indice = rand()%5000;
-      vet[i] = r.returnTrack(arq, indice);
-    }
-
-    return vet;
-  }
 }
