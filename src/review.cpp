@@ -332,7 +332,7 @@ void Review::iniciar(fstream &arq, int limit){
       else{
         if(escolha == 3){
           Ordenacao *o;
-          o->medeDesempenho(arq, 10);
+          o->medeDesempenho(dirArq, arq, 10);
         }
         else{
           if(escolha == 4){

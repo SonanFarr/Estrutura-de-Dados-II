@@ -99,11 +99,16 @@ void Ordenacao::heapify(Track *vet, int i, int n){
         int filho = 2*i + 1;
         if(filho < n)
         {
-            if(filho+1 < n && vet[filho+1].upvotes > vet[filho].upvotes)
+            if(filho+1 < n && vet[filho+1].upvotes > vet[filho].upvotes){
                 filho++;
+                comparacoes = comparacoes + 1;
+            }
             
-            if(vet[filho].upvotes > vet[i].upvotes)
+            if(vet[filho].upvotes > vet[i].upvotes){
                 troca(vet[i], vet[filho]);
+                trocas = trocas + 1;
+                comparacoes = comparacoes + 1;
+            }
         }
         i = filho;
     }
@@ -134,6 +139,7 @@ void Ordenacao::heapSortRec(Track *vet, int n){
     while(n > 0)
     {
         troca(vet[0], vet[n-1]);
+        trocas = trocas +1;
         heapify(vet, 0, n-1);
         n--;
     }
@@ -159,12 +165,49 @@ void Ordenacao::heapSortRec(Track *vet, int n){
  * @param v  Vetor de tracks que será ordenado.
  * @param n  Tamanho do vetor a ser ordenado.
  */
-void Ordenacao::heapSort(Track *vet, int n){
+void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
+ 
+  outfile << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
+  cout << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
 
-    high_resolution_clock::time_point inicio = high_resolution_clock::now();
-    heapSortRec(vet, n);
-    high_resolution_clock::time_point fim = high_resolution_clock::now();
-    cout << duration_cast<duration<double>>(fim - inicio).count() << " segundos" << endl;
+  int m = 3;
+  long long time;
+  long long somaTime = 0;
+  long long somaComp = 0;
+  long long somaMovi = 0;
+
+  if(!outfile.is_open() || !arqDat.is_open()){
+    cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
+  }
+  else{
+    string line;
+
+    while(getline(arqDat, line, '\n')){
+      int n = stoi(line);
+
+      for(int i=0; i<m; i++){
+        Track *vet = criaVetorTrack(arq, n);
+
+        high_resolution_clock::time_point inicio = high_resolution_clock::now();
+        heapSortRec(vet, n);
+        high_resolution_clock::time_point fim = high_resolution_clock::now();
+
+        time = duration_cast<duration<double>>(fim - inicio).count();
+
+        somaTime = somaTime + time;
+        somaComp = somaComp + comparacoes;
+        somaMovi = somaMovi + trocas;
+
+        delete[] vet;
+      }
+
+      outfile << "N = " << n << " registros: \n" << endl;
+      outfile << "Média de Tempo: " << somaTime/m << "\n";
+      outfile << "Média de Comparações: " << somaComp/m << "\n";
+      outfile << "Média de Movimentações: " << somaMovi/m << "\n";
+      outfile << "\n";
+    }
+  }
 }
 
 //? Função de medida de desempenho ------------------------------------------------------------------------------
@@ -175,27 +218,14 @@ void Ordenacao::heapSort(Track *vet, int n){
  * @param arq  Arquivo binário para leitura dos registros.
  * @param n    Tamanho do vetor a ser criado. 
  */
-void Ordenacao::medeDesempenho(fstream &arq, int n){
-  int m = 3;
+void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
 
-  for(int i=0; i<m; i++){
-    Track *vet = criaVetorTrack(arq, n);
-    
-    cout << "Vetor criado: " << endl;
-    for(int i=0; i<n; i++){
-      cout << vet[i].upvotes << " ";
-    }
-    cout << endl;
+  string dirArqDat = dir + "/input.dat";
+  string dirOutfile = dir + "/outfile.txt";
 
-    heapSort(vet, n);
+  ifstream arqDat(dirArqDat, ios::in);
+  ofstream outfile(dirOutfile, ios::app);
 
-    cout << "Vetor ordenado: " << endl;
-    for(int i=0; i<n; i++){
-      cout << vet[i].upvotes << " ";
-    }
-    cout << endl;
-
-    delete[] vet;
-  }
+  heapSort(arqDat, outfile, arq);
 
 }
