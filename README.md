@@ -31,6 +31,8 @@ Make clean
 
 - Comando para executar o arquivo do projeto:
 - Necessário especificar o caminho do diretório onde se encontra o arquivo a ser processado.
+- O diretório especificado precisa conter o arquivo .csv para processamento.
+- O diretório especificado precisa conter o arquivo .dat contendo os tamanhos dos vetores para ordenação.
 
 ```
 ./TrabalhoED2.exe ./<repositório_do_arquivo>
@@ -49,6 +51,9 @@ Make clean
 ### Etapa 2:
 
 ```
+- Implelemntar os algorítimos de ordenação (HeapSort, QuickSort e SelectionSort).
+- Testar o desempenho dos algorítimos baseado na média de tempo, comparações e movimentações.
+- Implementar tabela hash para armazenar as versões do aplicativo para diferentes registros.
 ```
 
 ### Etapa 3:
