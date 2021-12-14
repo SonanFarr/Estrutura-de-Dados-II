@@ -34,10 +34,6 @@ class Ordenacao{
     //? Função de medida de Desempenho -------------------------------------
     void medeDesempenho(string dir, fstream &arq, int n);
 
-    //? Variaveis Auxiliares -----------------------------------------------
-    long int comparacoes = 0;
-    long int trocas = 0;
-
   private:
 
 
