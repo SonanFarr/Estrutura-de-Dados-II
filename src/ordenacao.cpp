@@ -149,6 +149,67 @@ void Ordenacao::heapSortRec(Track *vet, int n){
     }
 }
 
+//? Funções Auxiliares QuickSort --------------------------------------------------------------------------------
+void Ordenacao::quickSortRec(Track *vet, int ini, int fim){
+   if(ini < fim)
+    {
+        int p = particiona(vet, ini, fim);
+        quickSortRec(vet, ini, p-1);
+        quickSortRec(vet, p+1, fim);
+        comparacoes = comparacoes +1;
+        return;
+    }
+}
+
+int Ordenacao::particiona(Track *vet, int ini, int fim){
+  Track pivo = medianaDeTres(vet, ini, fim);
+
+    int i = ini, j = fim-1;
+    while(true)
+    {
+        while(i < fim && vet[i].upvotes < pivo.upvotes)
+            i++;
+        while(j >= ini && vet[j].upvotes > pivo.upvotes)
+            j--;
+
+        if(i < j)
+        {
+            troca(vet[i], vet[j]);
+            trocas = trocas + 1;
+            comparacoes = comparacoes +1;
+            i++;
+            j--;
+        }
+        else
+            break;
+    }
+    troca(vet[i], vet[fim]);
+    trocas = trocas + 1;
+    return i;
+}
+
+Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
+  int meio = (ini+fim)/2;
+    if(vet[ini].upvotes > vet[fim].upvotes){
+        troca(vet[ini], vet[fim]);
+        trocas = trocas + 1;
+        comparacoes = comparacoes +1;
+    }
+    if(vet[meio].upvotes > vet[fim].upvotes){
+        troca(vet[meio], vet[fim]);
+        trocas = trocas + 1;
+        comparacoes = comparacoes +1;
+    }
+    if(vet[ini].upvotes > vet[meio].upvotes){
+        troca(vet[ini], vet[meio]);
+        trocas = trocas + 1;
+        comparacoes = comparacoes +1;
+    }
+    troca(vet[meio], vet[fim]);
+    trocas = trocas + 1;
+    return vet[fim];
+}
+
 //? Algorítimos de Ordenação ------------------------------------------------------------------------------------
 
 //void selectionSort() {
@@ -184,6 +245,7 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
     cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
   }
   else{
+    arqDat.seekg(0);
     string line;
     int i = 0;
 
@@ -225,8 +287,64 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
       i++;
     }
   }
-  arqDat.close();
-  outfile.close();
+}
+
+void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
+  outfile << "Medindo desempenho do algorítimo QuickSort: \n" << endl;
+  cout << "Medindo desempenho do algorítimo QuickSort: \n" << endl;
+
+  int m = 3;
+  long long time;
+  long long somaTime = 0;
+  long long somaComp = 0;
+  long long somaMovi = 0;
+
+  if(!outfile.is_open() || !arqDat.is_open()){
+    cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
+  }
+  else{
+    arqDat.seekg(0);
+    string line;
+    int i = 0;
+
+    while(i<2){
+      getline(arqDat, line, '\n');
+      int n = stoi(line);
+
+      for(int i=0; i<m; i++){
+        Track *vet = criaVetorTrack(arq, n);
+
+        auto inicio = chrono::high_resolution_clock::now();
+
+        quickSortRec(vet, 0, n-1);
+
+        auto final = chrono::high_resolution_clock::now() - inicio;
+        
+        time = chrono::duration_cast<chrono::microseconds>(final).count();
+
+        somaTime = somaTime + time;
+        somaComp = somaComp + comparacoes;
+        somaMovi = somaMovi + trocas;
+
+        comparacoes = 0;
+        trocas = 0;
+
+        delete[] vet;
+      }
+
+      outfile << "N = " << n << " registros: \n" << endl;
+      outfile << "Média de Tempo: " << (somaTime/m)/ 1000000.0 << "\n";
+      outfile << "Média de Comparações: " << somaComp/m << "\n";
+      outfile << "Média de Movimentações: " << somaMovi/m << "\n";
+      outfile << "\n";
+
+      somaTime = 0;
+      somaComp = 0;
+      somaMovi = 0;
+
+      i++;
+    }
+  }
 }
 
 //? Função de medida de desempenho ------------------------------------------------------------------------------
@@ -247,4 +365,8 @@ void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
 
   heapSort(arqDat, outfile, arq);
 
+  quickSort(arqDat, outfile, arq);
+
+  arqDat.close();
+  outfile.close();
 }
