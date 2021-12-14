@@ -62,7 +62,7 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
     int indice;
 
     for(int i=0; i<n; i++){
-      indice = rand()%5000;
+      indice = rand()%55000;
       vet[i] = r.returnTrack(arq, indice);
     }
 
@@ -101,13 +101,13 @@ void Ordenacao::heapify(Track *vet, int i, int n){
         {
             if(filho+1 < n && vet[filho+1].upvotes > vet[filho].upvotes){
                 filho++;
-                comparacoes = comparacoes + 1;
+                //comparacoes = comparacoes + 1;
             }
             
             if(vet[filho].upvotes > vet[i].upvotes){
                 troca(vet[i], vet[filho]);
-                trocas = trocas + 1;
-                comparacoes = comparacoes + 1;
+                //trocas = trocas + 1;
+                //comparacoes = comparacoes + 1;
             }
         }
         i = filho;
@@ -139,7 +139,7 @@ void Ordenacao::heapSortRec(Track *vet, int n){
     while(n > 0)
     {
         troca(vet[0], vet[n-1]);
-        trocas = trocas +1;
+        //trocas = trocas +1;
         heapify(vet, 0, n-1);
         n--;
     }
@@ -171,32 +171,39 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
   cout << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
 
   int m = 3;
-  long long time;
-  long long somaTime = 0;
-  long long somaComp = 0;
-  long long somaMovi = 0;
+  int time;
+  int somaTime = 0;
+  int somaComp = 0;
+  int somaMovi = 0;
 
   if(!outfile.is_open() || !arqDat.is_open()){
     cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
   }
   else{
     string line;
+    int i = 0;
 
-    while(getline(arqDat, line, '\n')){
+    while(i<2){
+      getline(arqDat, line, '\n');
       int n = stoi(line);
 
       for(int i=0; i<m; i++){
         Track *vet = criaVetorTrack(arq, n);
 
         high_resolution_clock::time_point inicio = high_resolution_clock::now();
-        heapSortRec(vet, n);
-        high_resolution_clock::time_point fim = high_resolution_clock::now();
 
+        heapSortRec(vet, n);
+
+        high_resolution_clock::time_point fim = high_resolution_clock::now();
+        
         time = duration_cast<duration<double>>(fim - inicio).count();
 
         somaTime = somaTime + time;
-        somaComp = somaComp + comparacoes;
-        somaMovi = somaMovi + trocas;
+        //somaComp = somaComp + comparacoes;
+        //somaMovi = somaMovi + trocas;
+
+        //comparacoes = 0;
+        //trocas = 0;
 
         delete[] vet;
       }
@@ -206,8 +213,16 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
       outfile << "Média de Comparações: " << somaComp/m << "\n";
       outfile << "Média de Movimentações: " << somaMovi/m << "\n";
       outfile << "\n";
+
+      somaTime = 0;
+      somaComp = 0;
+      somaMovi = 0;
+
+      i++;
     }
   }
+  arqDat.close();
+  outfile.close();
 }
 
 //? Função de medida de desempenho ------------------------------------------------------------------------------
