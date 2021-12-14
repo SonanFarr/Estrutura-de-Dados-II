@@ -150,6 +150,13 @@ void Ordenacao::heapSortRec(Track *vet, int n){
 }
 
 //? Funções Auxiliares QuickSort --------------------------------------------------------------------------------
+/**
+ * @brief      Função principal do quickSort.
+ * 
+ * @param vet  Vetor de Tracks a ser ordenado. 
+ * @param ini  Inicio do vetor.
+ * @param fim  Fim do vetor.
+ */
 void Ordenacao::quickSortRec(Track *vet, int ini, int fim){
    if(ini < fim)
     {
@@ -161,6 +168,14 @@ void Ordenacao::quickSortRec(Track *vet, int ini, int fim){
     }
 }
 
+/**
+ * @brief       Função auxiliar do quickSort para particionamento do vetor. 
+ * 
+ * @param vet   Vetor de Tracks. 
+ * @param ini   Início do vetor. 
+ * @param fim   Fim do vetor.
+ * @return int  Índice auxiliar.
+ */
 int Ordenacao::particiona(Track *vet, int ini, int fim){
   Track pivo = medianaDeTres(vet, ini, fim);
 
@@ -188,6 +203,14 @@ int Ordenacao::particiona(Track *vet, int ini, int fim){
     return i;
 }
 
+/**
+ * @brief         Função auxiliar para escolha do pivo.
+ * 
+ * @param vet     Vetor de Tracks. 
+ * @param ini     Início do vetor.
+ * @param fim     Fim do vetor.
+ * @return Track  Track retornada.
+ */
 Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
   int meio = (ini+fim)/2;
     if(vet[ini].upvotes > vet[fim].upvotes){
@@ -225,15 +248,16 @@ Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
 //}
 
 /**
- * @brief    Função principal para o algorítimo HeapSort.
+ * @brief    Função para o calculo do desempenho do algorítimo HeapSort.
  * 
- * @param v  Vetor de tracks que será ordenado.
- * @param n  Tamanho do vetor a ser ordenado.
+ * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
+ * @param outfile  Arquivo de saída.
+ * @param arq      Arquivo binário para leitura das tracks.
  */
 void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
  
-  outfile << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
-  cout << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
+  outfile << "================== Medindo desempenho do algorítimo HeapSort ================== \n" << endl;
+  cout << "================== Medindo desempenho do algorítimo HeapSort ================== \n" << endl;
 
   int m = 3;
   long long time;
@@ -252,6 +276,8 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
     while(i<2){
       getline(arqDat, line, '\n');
       int n = stoi(line);
+
+      outfile << "N = " << n << " registros: \n" << endl;
 
       for(int i=0; i<m; i++){
         Track *vet = criaVetorTrack(arq, n);
@@ -268,16 +294,22 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
         somaComp = somaComp + comparacoes;
         somaMovi = somaMovi + trocas;
 
+        outfile << "Execução: " << i << ": " << endl;
+        outfile << "Tempo: " << time / 1000000.0 << endl;
+        outfile << "Número de comparações: " << comparacoes << endl;
+        outfile << "Número de mudanças de posição: " << trocas << endl;
+        outfile << endl;
+
         comparacoes = 0;
         trocas = 0;
 
         delete[] vet;
       }
 
-      outfile << "N = " << n << " registros: \n" << endl;
       outfile << "Média de Tempo: " << (somaTime/m)/ 1000000.0 << "\n";
       outfile << "Média de Comparações: " << somaComp/m << "\n";
       outfile << "Média de Movimentações: " << somaMovi/m << "\n";
+      outfile << "---------------------------------------------------" << endl;
       outfile << "\n";
 
       somaTime = 0;
@@ -286,12 +318,21 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
 
       i++;
     }
+    cout << "HeapSort finalizado com sucesso." << endl;
+    cout << "---------------------------------------------------" << endl;
   }
 }
 
+/**
+ * @brief          Função para o calculo do desempenho do algorítimo QuickSort.
+ * 
+ * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
+ * @param outfile  Arquivo de saída.
+ * @param arq      Arquivo binário para leitura das tracks.
+ */
 void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
-  outfile << "Medindo desempenho do algorítimo QuickSort: \n" << endl;
-  cout << "Medindo desempenho do algorítimo QuickSort: \n" << endl;
+  outfile << "================== Medindo desempenho do algorítimo QuickSort ================== \n" << endl;
+  cout << "================== Medindo desempenho do algorítimo QuickSort ================== \n" << endl;
 
   int m = 3;
   long long time;
@@ -311,6 +352,8 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
       getline(arqDat, line, '\n');
       int n = stoi(line);
 
+      outfile << "N = " << n << " registros: \n" << endl;
+
       for(int i=0; i<m; i++){
         Track *vet = criaVetorTrack(arq, n);
 
@@ -326,16 +369,22 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
         somaComp = somaComp + comparacoes;
         somaMovi = somaMovi + trocas;
 
+        outfile << "Execução: " << i << ": " << endl;
+        outfile << "Tempo: " << time / 1000000.0 << endl;
+        outfile << "Número de comparações: " << comparacoes << endl;
+        outfile << "Número de mudanças de posição: " << trocas << endl;
+        outfile << endl;
+
         comparacoes = 0;
         trocas = 0;
 
         delete[] vet;
       }
 
-      outfile << "N = " << n << " registros: \n" << endl;
       outfile << "Média de Tempo: " << (somaTime/m)/ 1000000.0 << "\n";
       outfile << "Média de Comparações: " << somaComp/m << "\n";
       outfile << "Média de Movimentações: " << somaMovi/m << "\n";
+      outfile << "---------------------------------------------------" << endl;
       outfile << "\n";
 
       somaTime = 0;
@@ -344,6 +393,8 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
 
       i++;
     }
+    cout << "QuickSort finalizado com sucesso." << endl;
+    cout << "---------------------------------------------------" << endl;
   }
 }
 
@@ -352,6 +403,7 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
 /**
  * @brief      Função principal para teste de desempenho dos algorítimos de ordenação.
  * 
+ * @param dir  Diretório para abertura dos arquivos necessários.
  * @param arq  Arquivo binário para leitura dos registros.
  * @param n    Tamanho do vetor a ser criado. 
  */
@@ -366,6 +418,8 @@ void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
   heapSort(arqDat, outfile, arq);
 
   quickSort(arqDat, outfile, arq);
+
+  cout << "------------------------------------------------------------------------------" << endl;
 
   arqDat.close();
   outfile.close();

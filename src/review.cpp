@@ -47,6 +47,7 @@ void Review::verificaDir(){
   if(!reviewBin.is_open()){
 
     cout << "O arquivo 'tiktok_app_reviews.bin' ainda não existe." << endl;
+    cout << endl;
     cout << "Iniciando processamento e criação do arquivo binário:" << endl;
     cout << endl;
     cout << "Digite:" << endl;
@@ -54,6 +55,7 @@ void Review::verificaDir(){
     cout << "  - 2: Para processar apenas uma parte do arquivo (55000 primeiras linhas)." << endl;
     cout << "Escolha: " << endl;
     cin >> escolha;
+    cout << "------------------------------------------------------------------------------" << endl;
 
     if(escolha == 1){
       limit = 3660724;
@@ -64,6 +66,9 @@ void Review::verificaDir(){
 
     processaReview(limit);  // Chamada da função de processamento do arquivo .csv.
 
+    cout << "Arquivo .csv processado com sucesso!" << endl;
+    cout << "------------------------------------------------------------------------------" << endl;
+
     fstream arq(dirArq+"/tiktok_app_reviews.bin", ios::in | ios::binary);  // Abertura do arquivo .bin para leitura.
     arq.seekg(0);  // Posicionando o ponteiro do arquivo no primeiro byte.
     iniciar(arq, limit);  // Chamada do menu iniciar.
@@ -72,15 +77,17 @@ void Review::verificaDir(){
   // Caso contrário, abre o arquivo binário e segue para a próxima etapa.
   else{
     cout << "O arquivo 'tiktok_app_reviews.bin' já existe." << endl;
-
+    cout << endl;
     cout << "Defina o intervalo de acesso aos registros:" << endl;
     cout << "  - 1: Para o arquivo inteiro." << endl;
     cout << "  - 2: Para apenas uma parte do arquivo (55000 primeiros registros)." << endl;
     cout << endl;
     cout << "Atenção: Caso defina o intervalo para o arquivo inteiro e ele não tenha sido processado por completo," << endl;
     cout << "poderá haver corrupção nas informações exibidas." << endl;
+    cout << endl;
     cout << "Escolha: " << endl;
     cin >> escolha;
+    cout << "------------------------------------------------------------------------------" << endl;
 
     if(escolha == 1){
       limit = 3660724;
@@ -300,21 +307,30 @@ void Review::iniciar(fstream &arq, int limit){
 
   do{
     cout << "Digite uma das opções abaixo:" << endl;
+    cout << endl;
     cout << "  Operações da etapa 1: " << endl;
     cout << "    1 - Acessar Registro" << endl;
     cout << "    2 - Testar Importação" << endl;
+    cout << endl;
     cout << "  Operações da etapa 2: " << endl;
     cout << "    3 - Ordenação" << endl;
     cout << "    4 - Hash" << endl;
     cout << "    5 - Módulo de Teste" << endl;
-    cout << "  6 - Sair do Programa" << endl;
+    cout << endl;
+    cout << "  Outras operações: " << endl;
+    cout << "    6 - Sair do Programa" << endl;
+    cout << "Escolha: " << endl;
     
     int escolha;
     cin >> escolha;
 
+    cout << "------------------------------------------------------------------------------" << endl;
+
     while(escolha < 1 || escolha > 6){
       cout << "Digite uma opção válida:\n1 - Acessar Registro\n2 - Testar Importação\n3 - Sair do programa" << endl;
+      cout << "Escolha: " << endl; 
       cin >> escolha;
+      cout << "------------------------------------------------------------------------------" << endl;
     }
 
     if(escolha == 1){
