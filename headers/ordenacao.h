@@ -28,8 +28,14 @@ class Ordenacao{
     void constroiHeap(Track *vet, int n);
     void heapSortRec(Track *vet, int n);
 
+    //? Funções Auxiliares QuickSort ---------------------------------------
+    void quickSortRec(Track *vet, int ini, int fim);
+    int particiona(Track *vet, int ini, int fim);
+    Track medianaDeTres(Track *vet, int ini, int fim);
+
     //? Algorítimos de Ordenação -------------------------------------------
     void heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
+    void quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
 
     //? Função de medida de Desempenho -------------------------------------
     void medeDesempenho(string dir, fstream &arq, int n);
