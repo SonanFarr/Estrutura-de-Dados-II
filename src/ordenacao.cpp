@@ -14,6 +14,10 @@ using namespace std::chrono;
 
 using namespace std;
 
+//? Variaveis Auxiliares ---------------------------------------------------------------------------------------
+  long long comparacoes = 0;
+  long long trocas = 0;
+
 //? Constructor ------------------------------------------------------------------------------------------------
 Ordenacao::Ordenacao(){
 
@@ -56,7 +60,7 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
     Track *vet = new Track[n];
     Review r;
 
-    //srand(time(NULL));
+    srand(time(NULL));
 
     int limit = sizeof(arq)/sizeof(Track);
     int indice;
@@ -101,13 +105,13 @@ void Ordenacao::heapify(Track *vet, int i, int n){
         {
             if(filho+1 < n && vet[filho+1].upvotes > vet[filho].upvotes){
                 filho++;
-                //comparacoes = comparacoes + 1;
+                comparacoes = comparacoes + 1;
             }
             
             if(vet[filho].upvotes > vet[i].upvotes){
                 troca(vet[i], vet[filho]);
-                //trocas = trocas + 1;
-                //comparacoes = comparacoes + 1;
+                trocas = trocas + 1;
+                comparacoes = comparacoes + 1;
             }
         }
         i = filho;
@@ -139,7 +143,7 @@ void Ordenacao::heapSortRec(Track *vet, int n){
     while(n > 0)
     {
         troca(vet[0], vet[n-1]);
-        //trocas = trocas +1;
+        trocas = trocas +1;
         heapify(vet, 0, n-1);
         n--;
     }
@@ -171,10 +175,10 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
   cout << "Medindo desempenho do algorítimo HeapSort: \n" << endl;
 
   int m = 3;
-  int time;
-  int somaTime = 0;
-  int somaComp = 0;
-  int somaMovi = 0;
+  long long time;
+  long long somaTime = 0;
+  long long somaComp = 0;
+  long long somaMovi = 0;
 
   if(!outfile.is_open() || !arqDat.is_open()){
     cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
@@ -190,26 +194,26 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
       for(int i=0; i<m; i++){
         Track *vet = criaVetorTrack(arq, n);
 
-        high_resolution_clock::time_point inicio = high_resolution_clock::now();
+        auto inicio = chrono::high_resolution_clock::now();
 
         heapSortRec(vet, n);
 
-        high_resolution_clock::time_point fim = high_resolution_clock::now();
+        auto final = chrono::high_resolution_clock::now() - inicio;
         
-        time = duration_cast<duration<double>>(fim - inicio).count();
+        time = chrono::duration_cast<chrono::microseconds>(final).count();
 
         somaTime = somaTime + time;
-        //somaComp = somaComp + comparacoes;
-        //somaMovi = somaMovi + trocas;
+        somaComp = somaComp + comparacoes;
+        somaMovi = somaMovi + trocas;
 
-        //comparacoes = 0;
-        //trocas = 0;
+        comparacoes = 0;
+        trocas = 0;
 
         delete[] vet;
       }
 
       outfile << "N = " << n << " registros: \n" << endl;
-      outfile << "Média de Tempo: " << somaTime/m << "\n";
+      outfile << "Média de Tempo: " << (somaTime/m)/ 1000000.0 << "\n";
       outfile << "Média de Comparações: " << somaComp/m << "\n";
       outfile << "Média de Movimentações: " << somaMovi/m << "\n";
       outfile << "\n";
