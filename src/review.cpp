@@ -327,8 +327,20 @@ void Review::iniciar(fstream &arq, int limit){
     cout << "------------------------------------------------------------------------------" << endl;
 
     while(escolha < 1 || escolha > 6){
-      cout << "Digite uma opção válida:\n1 - Acessar Registro\n2 - Testar Importação\n3 - Sair do programa" << endl;
-      cout << "Escolha: " << endl; 
+      cout << "Digite uma das opções abaixo:" << endl;
+      cout << endl;
+      cout << "  Operações da etapa 1: " << endl;
+      cout << "    1 - Acessar Registro" << endl;
+      cout << "    2 - Testar Importação" << endl;
+      cout << endl;
+      cout << "  Operações da etapa 2: " << endl;
+      cout << "    3 - Ordenação" << endl;
+      cout << "    4 - Hash" << endl;
+      cout << "    5 - Módulo de Teste" << endl;
+      cout << endl;
+      cout << "  Outras operações: " << endl;
+      cout << "    6 - Sair do Programa" << endl;
+      cout << "Escolha: " << endl;
       cin >> escolha;
       cout << "------------------------------------------------------------------------------" << endl;
     }

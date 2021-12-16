@@ -88,6 +88,28 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
 //}
 
 
+//? Funções Auxiliares SelectionSort --------------------------------------------------------------------------------
+/**
+ * @brief    Função principal da selectionSort.
+ * 
+ * @param v  Vetor de tracks.
+ * @param i  Índice auxiliar.
+ * @param n  Tamanho do vetor de tracks.
+ */
+void Ordenacao::selectionSortRec(Track *vet, int i, int n){
+    for(i = 0; i < n-1; i++){
+      int min = i;
+      for(int j = i + 1; j < n; j++) {
+        if(vet[j].upvotes < vet[min].upvotes) 
+          min = j;
+        comparacoes++;
+      }
+      troca(vet[i], vet[min]);
+      trocas++;
+    }
+}
+
+
 //? Funções Auxiliares HeapSort --------------------------------------------------------------------------------
 /**
  * @brief    Função auxiliar para manipulação da heap.
@@ -235,18 +257,6 @@ Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
 
 //? Algorítimos de Ordenação ------------------------------------------------------------------------------------
 
-//void selectionSort() {
-  //for(int i = 0; i < this->tamanho-1; i++) {
-    //int min = i;
-    //for(int j = i + 1; j < this->tamanho; j++) {
-      //if(array[j].upvotes < array[min].upvotes) 
-        //min = j;
-    //}
-    //troca(array[i], array[min]); Necessário fazer a adaptação para a ordenação das tracks.
-    //imprimeArray();
-  //}
-//}
-
 /**
  * @brief    Função para o calculo do desempenho do algorítimo HeapSort.
  * 
@@ -255,7 +265,6 @@ Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
  * @param arq      Arquivo binário para leitura das tracks.
  */
 void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
- 
   outfile << "================== Medindo desempenho do algorítimo HeapSort ================== \n" << endl;
   cout << "================== Medindo desempenho do algorítimo HeapSort ================== \n" << endl;
 
@@ -398,6 +407,81 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
   }
 }
 
+/**
+ * @brief          Função para o calculo do desempenho do algorítimo SelectionSort.
+ * 
+ * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
+ * @param outfile  Arquivo de saída.
+ * @param arq      Arquivo binário para leitura das tracks.
+ */
+void Ordenacao::selectionSort(ifstream &arqDat, ofstream &outfile, fstream &arq) {
+  outfile << "================== Medindo desempenho do algoritimo SelectionSort ================== \n" << endl;
+  cout << "================== Medindo desempenho do algoritimo SelectionSort ================== \n" << endl;
+
+  int m = 3;
+  long long time;
+  long long somaTime = 0;
+  long long somaComp = 0;
+  long long somaMovi = 0;
+
+  if(!outfile.is_open() || !arqDat.is_open()){
+    cout << "ERRO: Algo deu errado com a abertura de um dos arquivos." << endl;
+  }
+  else{
+    arqDat.seekg(0);
+    string line;
+    int i = 0;
+
+    while(i<2){
+      getline(arqDat, line, '\n');
+      int n = stoi(line);
+
+      outfile << "N = " << n << " registros: \n" << endl;
+
+      for(int i=0; i<m; i++){
+        Track *vet = criaVetorTrack(arq, n);
+
+        auto inicio = chrono::high_resolution_clock::now();
+
+        selectionSortRec(vet, 0, n-1);
+
+        auto final = chrono::high_resolution_clock::now() - inicio;
+        
+        time = chrono::duration_cast<chrono::microseconds>(final).count();
+
+        somaTime = somaTime + time;
+        somaComp = somaComp + comparacoes;
+        somaMovi = somaMovi + trocas;
+
+        outfile << "Execução: " << i << ": " << endl;
+        outfile << "Tempo: " << time / 1000000.0 << endl;
+        outfile << "Número de comparações: " << comparacoes << endl;
+        outfile << "Número de mudanças de posição: " << trocas << endl;
+        outfile << endl;
+
+        comparacoes = 0;
+        trocas = 0;
+
+        delete[] vet;
+      }
+
+      outfile << "Média de Tempo: " << (somaTime/m)/ 1000000.0 << "\n";
+      outfile << "Média de Comparações: " << somaComp/m << "\n";
+      outfile << "Média de Movimentações: " << somaMovi/m << "\n";
+      outfile << "---------------------------------------------------" << endl;
+      outfile << "\n";
+
+      somaTime = 0;
+      somaComp = 0;
+      somaMovi = 0;
+
+      i++;
+    }
+    cout << "SelectionSort finalizado com sucesso." << endl;
+    cout << "---------------------------------------------------" << endl;
+  }
+}
+
 //? Função de medida de desempenho ------------------------------------------------------------------------------
 
 /**
@@ -418,6 +502,8 @@ void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
   heapSort(arqDat, outfile, arq);
 
   quickSort(arqDat, outfile, arq);
+
+  selectionSort(arqDat, outfile, arq);
 
   cout << "------------------------------------------------------------------------------" << endl;
 

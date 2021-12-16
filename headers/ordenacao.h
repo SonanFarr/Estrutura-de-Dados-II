@@ -33,9 +33,13 @@ class Ordenacao{
     int particiona(Track *vet, int ini, int fim);
     Track medianaDeTres(Track *vet, int ini, int fim);
 
+    //? Funções Auxiliares SelectionSort ---------------------------------------
+    void selectionSortRec(Track *vet, int ini, int fim);
+
     //? Algorítimos de Ordenação -------------------------------------------
     void heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
     void quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
+    void selectionSort(ifstream &arqDat, ofstream &outfile, fstream &arq);
 
     //? Função de medida de Desempenho -------------------------------------
     void medeDesempenho(string dir, fstream &arq, int n);
