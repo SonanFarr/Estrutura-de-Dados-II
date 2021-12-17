@@ -74,20 +74,6 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
   }
 }
 
-//void criaAleatorio() {
-  //for(int i = 0; i < getTamanho(); i++) {
-    //array[i] = rand() % getTamanho() * 2;
-  //}
-//}
-
-//void imprimeArray() {
-  //for(int i = 0; i < getTamanho(); i++) {
-    //cout << array[i].upvotes << " ";
-  //}
-    //cout << endl;
-//}
-
-
 //? Funções Auxiliares SelectionSort --------------------------------------------------------------------------------
 /**
  * @brief    Função principal da selectionSort.
