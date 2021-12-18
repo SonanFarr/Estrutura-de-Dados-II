@@ -15,8 +15,9 @@ using namespace std::chrono;
 using namespace std;
 
 //? Constructor ---------------------------------------------------------------
-Hash::Hash(int tamanho){
+Hash::Hash(int tamanho, string dir){
     this->tamanho = tamanho;
+    this->dir = dir;
     quantItens = 0;
     vet = new Version *[tamanho];
 
@@ -57,7 +58,7 @@ void Hash::insere(Track *version){
         ant = aux;
 
         if(aux->getTrack()->app_version == version->app_version){
-            aux->quantidade = aux->quantidade +1;
+            aux->quantidade = aux->quantidade + 1;
         }
 
         aux = aux->prox;
@@ -79,8 +80,36 @@ void Hash::insere(Track *version){
     }
 }
 
-void Hash::versionFrequentes(){
+void Hash::versionFrequentes(string dir, fstream &arq){
+    string dirArqDat = dir + "/input.dat";
+    string dirOutfile = dir + "/outfileHash.txt";
 
+     ifstream arqDat(dirArqDat, ios::in);
+     ofstream outfile(dirOutfile, ios::app);
+
+     arqDat.seekg(0);
+     string line;
+
+     getline(arqDat, line, '\n');
+
+     int n = stoi(line);
+
+     int tam = 1301;
+
+     Ordenacao o;
+
+     Track *vet = o.criaVetorTrack(arq, n);
+     Hash tabela(tam, dir);
+     
+     for(int i=0; i<n; i++){
+         tabela.insere(&vet[i]);
+     }
+
+     quickSortRecHash(tabela.vet, 0, tabela.tamanho);
+
+     for(int i=tabela.tamanho; i>0; i--){
+         outfile << "Versão: " << tabela.vet[i]->getTrack()->app_version << " - Quantidade: " << tabela.vet[i]->quantidade << endl; 
+     }
 }
 
 void Hash::quickSortRecHash(Version **vet, int ini, int fim){
@@ -97,16 +126,30 @@ void Hash::imprimeHash(){
 }
 
 //? Funções Auxiliares --------------------------------------------------------
-int converteEmInteiro(Track *track){
+int Hash::converteEmInteiro(Track *track){
+    std::stringstream ss(track->app_version);
 
+    string line;
+    string aux;
+
+    getline(ss, aux, '.');
+    line = line + aux;
+    getline(ss, aux, '.');
+    line = line + aux;
+    getline(ss, aux);
+    line = line + aux;
+
+    int app_version_int = stoi(line);
+    
+    return app_version_int;
 }
 
-int busca(){
+int Hash::busca(){
 
 }
 
 //? Funções Auxilares de Ordenação --------------------------------------------
-int particionaHash(Version **vet, int ini, int fim){
+int Hash::particionaHash(Version **vet, int ini, int fim){
     Version *pivo = medianaDeTresHash(vet, ini, fim);
 
     int i = ini, j = fim-1;
@@ -114,25 +157,33 @@ int particionaHash(Version **vet, int ini, int fim){
     {
         while(i < fim && vet[i]->quantidade < pivo->quantidade)
             i++;
-        while(j >= ini && vet[j].upvotes > pivo.upvotes)
+        while(j >= ini && vet[j]->quantidade > pivo->quantidade)
             j--;
 
         if(i < j)
         {
-            troca(vet[i], vet[j]);
-            trocas = trocas + 1;
-            comparacoes = comparacoes +1;
+            swap(vet[i], vet[j]);
             i++;
             j--;
         }
         else
             break;
     }
-    troca(vet[i], vet[fim]);
-    trocas = trocas + 1;
+    swap(vet[i], vet[fim]);
     return i;
 }
         
-Version medianaDeTresHash(Version **vet, int ini, int fim){
-
+Version *Hash::medianaDeTresHash(Version **vet, int ini, int fim){
+    int meio = (ini+fim)/2;
+    if(vet[ini]->quantidade > vet[fim]->quantidade){
+        swap(vet[ini], vet[fim]);
+    }
+    if(vet[meio]->quantidade > vet[fim]->quantidade){
+        swap(vet[meio], vet[fim]);
+    }
+    if(vet[ini]->quantidade > vet[meio]->quantidade){
+        swap(vet[ini], vet[meio]);
+    }
+    swap(vet[meio], vet[fim]);
+    return vet[fim];
 }

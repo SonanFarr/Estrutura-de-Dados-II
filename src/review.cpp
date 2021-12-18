@@ -9,6 +9,7 @@
 #include "../headers/review.h"
 #include "../headers/track.h"
 #include "../headers/ordenacao.h"
+#include "../headers/hash.h"
 
 using namespace std;
 
@@ -364,7 +365,8 @@ void Review::iniciar(fstream &arq, int limit){
         }
         else{
           if(escolha == 4){
-
+            Hash *h;
+            h->versionFrequentes(dirArq, arq);
           }
           else{
             if(escolha == 5){

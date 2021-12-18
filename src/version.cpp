@@ -21,7 +21,7 @@ Version::Version(Track *track){
 Version::~Version(){
     track = nullptr;
     prox = nullptr;
-    quantidade = NULL;
+    //quantidade = NULL;
 
     delete track, prox, quantidade;
 }

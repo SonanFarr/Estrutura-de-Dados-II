@@ -480,7 +480,7 @@ void Ordenacao::selectionSort(ifstream &arqDat, ofstream &outfile, fstream &arq)
 void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
 
   string dirArqDat = dir + "/input.dat";
-  string dirOutfile = dir + "/outfile.txt";
+  string dirOutfile = dir + "/outfileOrdenacao.txt";
 
   ifstream arqDat(dirArqDat, ios::in);
   ofstream outfile(dirOutfile, ios::app);
