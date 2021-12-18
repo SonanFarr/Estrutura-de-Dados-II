@@ -12,14 +12,14 @@ using namespace std;
 class Hash{
     public:
         //? Constructors ------------------------------------- 
-        Hash(int tamanho);
+        Hash(int tamanho, string dir);
 
         //? Destructor ---------------------------------------
         ~Hash();
 
         //? Funções Principais -------------------------------
         void insere(Track *version);
-        void versionFrequentes();
+        void versionFrequentes(string dir, fstream &arq);
         void quickSortRecHash(Version **vet, int ini, int fim);
         void imprimeHash();
 
@@ -34,6 +34,7 @@ class Hash{
 
     private:
         Version **vet;
+        string dir;
         int tamanho;
         int quantItens;
 };
