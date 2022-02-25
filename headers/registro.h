@@ -1,5 +1,5 @@
-#ifndef TRACK_H
-#define TRACK_H
+#ifndef REGISTRO_H
+#define REGISTRO_H
 
 #include <iostream>
 #include <fstream>
@@ -11,10 +11,10 @@
 
 using namespace std;
 
-class Track{
+class Registro{
   public:
-    Track();
-    ~Track();
+    Registro();
+    ~Registro();
 
     char review_id[100];     // String para armazenar o id do comentário.
     char review_text[2000];  // String para armazenar o comentário.

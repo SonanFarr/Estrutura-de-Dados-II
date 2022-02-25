@@ -6,7 +6,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <string>
-#include "../headers/track.h"
+#include "../headers/registro.h"
 #include "../headers/review.h"
 
 using namespace std;
@@ -20,21 +20,21 @@ class Ordenacao{
     ~Ordenacao();
 
     //? Funções Auxiliares Gerais ------------------------------------------
-    void troca(Track &a, Track &b);
-    Track *criaVetorTrack(fstream &arq, int n);
+    void troca(int &a, int &b);
+    int *criaVetorRegistro(fstream &arq, int n);
 
     //? Funções Auxiliares HeapSort ----------------------------------------
-    void heapify(Track *vet, int i, int n);
-    void constroiHeap(Track *vet, int n);
-    void heapSortRec(Track *vet, int n);
+    void heapify(int *vet, int i, int n);
+    void constroiHeap(int *vet, int n);
+    void heapSortRec(int *vet, int n);
 
     //? Funções Auxiliares QuickSort ---------------------------------------
-    void quickSortRec(Track *vet, int ini, int fim);
-    int particiona(Track *vet, int ini, int fim);
-    Track medianaDeTres(Track *vet, int ini, int fim);
+    void quickSortRec(int *vet, int ini, int fim);
+    int particiona(int *vet, int ini, int fim);
+    int medianaDeTres(int *vet, int ini, int fim);
 
     //? Funções Auxiliares SelectionSort ---------------------------------------
-    void selectionSortRec(Track *vet, int ini, int fim);
+    void selectionSortRec(int *vet, int ini, int fim);
 
     //? Algorítimos de Ordenação -------------------------------------------
     void heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq);

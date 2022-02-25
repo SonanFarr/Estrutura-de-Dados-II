@@ -5,9 +5,11 @@
 #include <string.h>
 #include <cstring>
 #include <vector>
-#include "../headers/track.h"
+#include "../headers/registro.h"
 
 using namespace std;
+
+//int limitIndex = 0;
 
 class Review{
   public:
@@ -32,9 +34,9 @@ class Review{
   
 
     //? Funções Auxiliares -----------------------------------------------------
-    void escreveTrack(fstream &arq, Track track);
-    void criaTrack(fstream &arq, char id[], char text[], int votes, char version[], char date[]);
-    Track returnTrack(fstream &arq, int index);
+    void escreveRegistro(fstream &arq, Registro registro, char text[]);
+    void criaRegistro(fstream &arq, char id[], char text[], int votes, char version[], char date[]);
+    Registro returnRegistro(fstream &arq, int index);
 
   private:
     string dirArq;       // String para armazenar o diretório do arquivo.
