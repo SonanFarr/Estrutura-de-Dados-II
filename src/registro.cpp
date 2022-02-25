@@ -5,16 +5,16 @@
 #include <sstream>
 #include <cstring>
 #include <ctime>
-#include "../headers/track.h"
+#include "../headers/Registro.h"
 
 using namespace std;
 
 //? Constructor ------------------------------------------------------------------------------------------------
-Track::Track(){
+Registro::Registro(){
 
 }
 
 //? Destructor -------------------------------------------------------------------------------------------------
-Track::~Track(){
+Registro::~Registro(){
 
 }

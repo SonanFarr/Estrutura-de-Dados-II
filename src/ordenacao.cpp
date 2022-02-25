@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
-#include "../headers/track.h"
+#include "../headers/registro.h"
 #include "../headers/review.h"
 #include "../headers/ordenacao.h"
 
@@ -35,20 +35,20 @@ Ordenacao::~Ordenacao(){
  * @param a  Elemento a.
  * @param b  Elemento b.
  */
-void Ordenacao::troca(Track &a, Track &b) {
-  Track aux = a;
+void Ordenacao::troca(int &a, int &b) {
+  int aux = a;
   a = b;
   b = aux;
 }
 
 /**
- * @brief         Função para criar um vetor com n tracks aleatórias.
+ * @brief         Função para criar um vetor com n registros aleatórias.
  * 
  * @param arq     Arquivo do qual será lido os registros.
  * @param n       Tamanho do vetor a ser criado.
- * @return Track  Vetor de tracks criado.
+ * @return int    Vetor de registros criado.
  */
-Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
+int *Ordenacao::criaVetorRegistro(fstream &arq, int n){
   
   if(!arq.is_open()){
     cout << "ERRO: Arquivo não foi aberto corretamente." << endl;
@@ -57,17 +57,17 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
   }
   else{
 
-    Track *vet = new Track[n];
+    int *vet = new int[n];
     Review r;
 
     srand(time(NULL));
 
-    int limit = sizeof(arq)/sizeof(Track);
+    int limit = sizeof(arq)/sizeof(Registro);
     int indice;
 
     for(int i=0; i<n; i++){
-      indice = rand()%55000;
-      vet[i] = r.returnTrack(arq, indice);
+      indice = rand()%2400000;
+      vet[i] = r.returnRegistro(arq, indice).upvotes;
     }
 
     return vet;
@@ -78,15 +78,15 @@ Track *Ordenacao::criaVetorTrack(fstream &arq, int n){
 /**
  * @brief    Função principal da selectionSort.
  * 
- * @param v  Vetor de tracks.
+ * @param v  Vetor de registros.
  * @param i  Índice auxiliar.
- * @param n  Tamanho do vetor de tracks.
+ * @param n  Tamanho do vetor de registros.
  */
-void Ordenacao::selectionSortRec(Track *vet, int i, int n){
+void Ordenacao::selectionSortRec(int *vet, int i, int n){
     for(i = 0; i < n-1; i++){
       int min = i;
       for(int j = i + 1; j < n; j++) {
-        if(vet[j].upvotes < vet[min].upvotes) 
+        if(vet[j] < vet[min]) 
           min = j;
         comparacoes++;
       }
@@ -100,23 +100,23 @@ void Ordenacao::selectionSortRec(Track *vet, int i, int n){
 /**
  * @brief    Função auxiliar para manipulação da heap.
  * 
- * @param v  Vetor de tracks.
+ * @param v  Vetor de registros.
  * @param i  Índice auxiliar.
- * @param n  Tamanho do vetor de tracks.
+ * @param n  Tamanho do vetor de registros.
  */
-void Ordenacao::heapify(Track *vet, int i, int n){
+void Ordenacao::heapify(int *vet, int i, int n){
 
     while(i < n)
     {
         int filho = 2*i + 1;
         if(filho < n)
         {
-            if(filho+1 < n && vet[filho+1].upvotes > vet[filho].upvotes){
+            if(filho+1 < n && vet[filho+1] > vet[filho]){
                 filho++;
                 comparacoes = comparacoes + 1;
             }
             
-            if(vet[filho].upvotes > vet[i].upvotes){
+            if(vet[filho] > vet[i]){
                 troca(vet[i], vet[filho]);
                 trocas = trocas + 1;
                 comparacoes = comparacoes + 1;
@@ -129,10 +129,10 @@ void Ordenacao::heapify(Track *vet, int i, int n){
 /**
  * @brief    Função auxiliar para criação da árvore heap.
  * 
- * @param v  Vetor de tracks.
- * @param n  Tamanho do vetor de tracks.
+ * @param v  Vetor de registros.
+ * @param n  Tamanho do vetor de registros.
  */
-void Ordenacao::constroiHeap(Track *vet, int n){
+void Ordenacao::constroiHeap(int *vet, int n){
     
     for(int i = n/2-1; i >= 0; i--){
         heapify(vet, i, n-1);
@@ -142,10 +142,10 @@ void Ordenacao::constroiHeap(Track *vet, int n){
 /**
  * @brief    Função auxiliar para ordenação da heap. 
  * 
- * @param v  Vetor de tracks.
- * @param n  Tamanho do vetor de tracks.
+ * @param v  Vetor de registros.
+ * @param n  Tamanho do vetor de registros.
  */
-void Ordenacao::heapSortRec(Track *vet, int n){
+void Ordenacao::heapSortRec(int *vet, int n){
     
     constroiHeap(vet, n);
     while(n > 0)
@@ -161,11 +161,11 @@ void Ordenacao::heapSortRec(Track *vet, int n){
 /**
  * @brief      Função principal do quickSort.
  * 
- * @param vet  Vetor de Tracks a ser ordenado. 
+ * @param vet  Vetor de registros a ser ordenado. 
  * @param ini  Inicio do vetor.
  * @param fim  Fim do vetor.
  */
-void Ordenacao::quickSortRec(Track *vet, int ini, int fim){
+void Ordenacao::quickSortRec(int *vet, int ini, int fim){
    if(ini < fim)
     {
         int p = particiona(vet, ini, fim);
@@ -179,20 +179,20 @@ void Ordenacao::quickSortRec(Track *vet, int ini, int fim){
 /**
  * @brief       Função auxiliar do quickSort para particionamento do vetor. 
  * 
- * @param vet   Vetor de Tracks. 
+ * @param vet   Vetor de registros. 
  * @param ini   Início do vetor. 
  * @param fim   Fim do vetor.
  * @return int  Índice auxiliar.
  */
-int Ordenacao::particiona(Track *vet, int ini, int fim){
-  Track pivo = medianaDeTres(vet, ini, fim);
+int Ordenacao::particiona(int *vet, int ini, int fim){
+  int pivo = medianaDeTres(vet, ini, fim);
 
     int i = ini, j = fim-1;
     while(true)
     {
-        while(i < fim && vet[i].upvotes < pivo.upvotes)
+        while(i < fim && vet[i] < pivo)
             i++;
-        while(j >= ini && vet[j].upvotes > pivo.upvotes)
+        while(j >= ini && vet[j] > pivo)
             j--;
 
         if(i < j)
@@ -214,24 +214,24 @@ int Ordenacao::particiona(Track *vet, int ini, int fim){
 /**
  * @brief         Função auxiliar para escolha do pivo.
  * 
- * @param vet     Vetor de Tracks. 
+ * @param vet     Vetor de registros. 
  * @param ini     Início do vetor.
  * @param fim     Fim do vetor.
- * @return Track  Track retornada.
+ * @return registro  registro retornada.
  */
-Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
+int Ordenacao::medianaDeTres(int *vet, int ini, int fim){
   int meio = (ini+fim)/2;
-    if(vet[ini].upvotes > vet[fim].upvotes){
+    if(vet[ini] > vet[fim]){
         troca(vet[ini], vet[fim]);
         trocas = trocas + 1;
         comparacoes = comparacoes +1;
     }
-    if(vet[meio].upvotes > vet[fim].upvotes){
+    if(vet[meio] > vet[fim]){
         troca(vet[meio], vet[fim]);
         trocas = trocas + 1;
         comparacoes = comparacoes +1;
     }
-    if(vet[ini].upvotes > vet[meio].upvotes){
+    if(vet[ini] > vet[meio]){
         troca(vet[ini], vet[meio]);
         trocas = trocas + 1;
         comparacoes = comparacoes +1;
@@ -248,7 +248,7 @@ Track Ordenacao::medianaDeTres(Track *vet, int ini, int fim){
  * 
  * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
  * @param outfile  Arquivo de saída.
- * @param arq      Arquivo binário para leitura das tracks.
+ * @param arq      Arquivo binário para leitura das registros.
  */
 void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
   outfile << "================== Medindo desempenho do algorítimo HeapSort ================== \n" << endl;
@@ -268,14 +268,14 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
     string line;
     int i = 0;
 
-    while(i<2){
+    while(i<1){
       getline(arqDat, line, '\n');
-      int n = stoi(line);
+      long long n = 1000000;
 
       outfile << "N = " << n << " registros: \n" << endl;
 
       for(int i=0; i<m; i++){
-        Track *vet = criaVetorTrack(arq, n);
+        int *vet = criaVetorRegistro(arq, n);
 
         auto inicio = chrono::high_resolution_clock::now();
 
@@ -323,7 +323,7 @@ void Ordenacao::heapSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
  * 
  * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
  * @param outfile  Arquivo de saída.
- * @param arq      Arquivo binário para leitura das tracks.
+ * @param arq      Arquivo binário para leitura das registros.
  */
 void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
   outfile << "================== Medindo desempenho do algorítimo QuickSort ================== \n" << endl;
@@ -343,14 +343,14 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
     string line;
     int i = 0;
 
-    while(i<2){
+    while(i<1){
       getline(arqDat, line, '\n');
-      int n = stoi(line);
+      long long n = 1000000;
 
       outfile << "N = " << n << " registros: \n" << endl;
 
       for(int i=0; i<m; i++){
-        Track *vet = criaVetorTrack(arq, n);
+        int *vet = criaVetorRegistro(arq, n);
 
         auto inicio = chrono::high_resolution_clock::now();
 
@@ -398,7 +398,7 @@ void Ordenacao::quickSort(ifstream &arqDat, ofstream &outfile, fstream &arq){
  * 
  * @param arqDat   Arquivo .dat para leitura dos tamanhos dos vetores a serem criados
  * @param outfile  Arquivo de saída.
- * @param arq      Arquivo binário para leitura das tracks.
+ * @param arq      Arquivo binário para leitura das registros.
  */
 void Ordenacao::selectionSort(ifstream &arqDat, ofstream &outfile, fstream &arq) {
   outfile << "================== Medindo desempenho do algoritimo SelectionSort ================== \n" << endl;
@@ -418,14 +418,14 @@ void Ordenacao::selectionSort(ifstream &arqDat, ofstream &outfile, fstream &arq)
     string line;
     int i = 0;
 
-    while(i<2){
+    while(i<1){
       getline(arqDat, line, '\n');
-      int n = stoi(line);
+      long long n = 1000000;
 
       outfile << "N = " << n << " registros: \n" << endl;
 
       for(int i=0; i<m; i++){
-        Track *vet = criaVetorTrack(arq, n);
+        int *vet = criaVetorRegistro(arq, n);
 
         auto inicio = chrono::high_resolution_clock::now();
 
@@ -485,9 +485,9 @@ void Ordenacao::medeDesempenho(string dir, fstream &arq, int n){
   ifstream arqDat(dirArqDat, ios::in);
   ofstream outfile(dirOutfile, ios::app);
 
-  heapSort(arqDat, outfile, arq);
+  //heapSort(arqDat, outfile, arq);
 
-  quickSort(arqDat, outfile, arq);
+  //quickSort(arqDat, outfile, arq);
 
   selectionSort(arqDat, outfile, arq);
 

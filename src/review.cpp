@@ -7,9 +7,9 @@
 #include <ctime>
 #include <string.h>
 #include "../headers/review.h"
-#include "../headers/track.h"
+#include "../headers/registro.h"
 #include "../headers/ordenacao.h"
-#include "../headers/hash.h"
+//#include "../headers/hash.h"
 
 using namespace std;
 
@@ -59,7 +59,7 @@ void Review::verificaDir(){
     cout << "------------------------------------------------------------------------------" << endl;
 
     if(escolha == 1){
-      limit = 3660724;
+      limit = 2400000;
     }
     else{
       limit = 55000;
@@ -91,7 +91,7 @@ void Review::verificaDir(){
     cout << "------------------------------------------------------------------------------" << endl;
 
     if(escolha == 1){
-      limit = 3660724;
+      limit = 2400000;
     }
     else{
       limit = 55000;
@@ -123,16 +123,17 @@ void Review::processaReview(int limit){
   string line = "";  // String para capturar a linha inteira do arquivo arq1.
   string aux = "";   // String auxiliar para armazenar o caractere ','.
 
-  // String auxiliares para armazenar os campos de criação da track.
+  // String auxiliares para armazenar os campos de criação da registro.
   string idAux = "";   
   string textAux = "";
   string votesAux = "";
   string versionAux = "";
   string dateAux = "";
 
-  // Vetores de char para fazer a criação do objeto do tipo Track.
+  // Vetores de char para fazer a criação do objeto do tipo registro.
   char id[100];
   char text[2000];
+  char text2[50];
   int votes;
   char version[7];
   char date[20];
@@ -141,7 +142,7 @@ void Review::processaReview(int limit){
 
   // Para processar o .csv completamente, é necessário alterar o parâmetro do while
   // para percorrer o arquivo por completo.
-  while(arq1.good() && cont < limit){
+  while(cont < 1000000){
     // Ignorar a primeira linha do .csv.
     if(cont == 0){
       getline(arq1, line);
@@ -174,7 +175,7 @@ void Review::processaReview(int limit){
       }
     }
 
-    // Armazenando as informações das strings nos vetores de char correspondentes para a criação da track.
+    // Armazenando as informações das strings nos vetores de char correspondentes para a criação da registro.
     strcpy(id, idAux.c_str());
     strcpy(text, textAux.c_str());
 
@@ -188,7 +189,7 @@ void Review::processaReview(int limit){
     strcpy(version, versionAux.c_str());
     strcpy(date, dateAux.c_str());
 
-    criaTrack(arq2, id, text, votes, version, date);  // Chamada a função para criar o objeto track.
+    criaRegistro(arq2, id, text2, votes, version, date);  // Chamada a função para criar o objeto registro.
     cont++;
   }
 
@@ -215,14 +216,14 @@ void Review::importaRegistros(){
  */
 void Review::acessaRegistro(fstream &arq, int index){
 
-  Track track = returnTrack(arq, index); // Criação do objeto track.
+  Registro registro = returnRegistro(arq, index); // Criação do objeto registro.
 
   cout << endl;
-  cout << "Id: " << track.review_id << endl;
-  cout << "Text: " << track.review_text << endl;
-  cout << "UpVotes: " << track.upvotes << endl;
-  cout << "Version: " << track.app_version << endl;
-  cout << "Date: " << track.posted_date << endl;
+  cout << "Id: " << registro.review_id << endl;
+  //cout << "Text: " << registro.review_text << endl;
+  cout << "UpVotes: " << registro.upvotes << endl;
+  cout << "Version: " << registro.app_version << endl;
+  cout << "Date: " << registro.posted_date << endl;
   cout << "----------------------------------------------------------------" << endl;
   cout << endl;
 }
@@ -236,14 +237,14 @@ void Review::acessaRegistro(fstream &arq, int index){
  */
 void Review::acessaRegistroEscreveArquivo(fstream &arq, ofstream &outFile, int index){
   
-  Track track = returnTrack(arq, index); // Criação do objeto track.
+  Registro registro = returnRegistro(arq, index); // Criação do objeto registro.
 
   outFile << endl;
-  outFile << "Id: " << track.review_id << endl;
-  outFile << "Text: " << track.review_text << endl;
-  outFile << "UpVotes: " << track.upvotes << endl;
-  outFile << "Version: " << track.app_version << endl;
-  outFile << "Date: " << track.posted_date << endl;
+  outFile << "Id: " << registro.review_id << endl;
+  //outFile << "Text: " << registro.review_text << endl;
+  outFile << "UpVotes: " << registro.upvotes << endl;
+  outFile << "Version: " << registro.app_version << endl;
+  outFile << "Date: " << registro.posted_date << endl;
   outFile << "----------------------------------------------------------------" << endl;
   outFile << endl;
 }
@@ -365,8 +366,8 @@ void Review::iniciar(fstream &arq, int limit){
         }
         else{
           if(escolha == 4){
-            Hash *h;
-            h->versionFrequentes(dirArq, arq);
+            //Hash *h;
+            //h->versionFrequentes(dirArq, arq);
           }
           else{
             if(escolha == 5){
@@ -386,12 +387,12 @@ void Review::iniciar(fstream &arq, int limit){
 
 //? Funções Auxiliares -----------------------------------------------------------------------
 /**
- * @brief        Função utilizada para escrever a track no arquivo binário.
+ * @brief        Função utilizada para escrever a registro no arquivo binário.
  * 
- * @param arq    Arquivo binário no qual será feita a escrita das tracks.
- * @param track  Objeto do tipo Track que será armazenado.
+ * @param arq    Arquivo binário no qual será feita a escrita das registros.
+ * @param registro  Objeto do tipo registro que será armazenado.
  */
-void Review::escreveTrack(fstream &arq, Track track){
+void Review::escreveRegistro(fstream &arq, Registro registro, char text[]){
 
   // Verificando se o arquivo foi aberto corretamente.
   if(!arq.is_open()){
@@ -399,62 +400,65 @@ void Review::escreveTrack(fstream &arq, Track track){
     return;
   }
   else{
-    arq.write(reinterpret_cast<const char*>(&track), sizeof(Track));  // Realiza a escrita da track no arquivo binário.
+    fstream arqText(dirArq+"/tiktok_app_reviews_text.bin", ios:: out | ios::binary);
+    arq.write(reinterpret_cast<const char*>(text), 50);
+    arqText.close();
+    arq.write(reinterpret_cast<const char*>(&registro), sizeof(registro));  // Realiza a escrita da registro no arquivo binário.
   }
 }
 
 /**
- * @brief          Função responsável por criar o objeto do tipo Track.
+ * @brief          Função responsável por criar o objeto do tipo registro.
  * 
- * @param arq      Arquivo binário no qual será escrito a track.
+ * @param arq      Arquivo binário no qual será escrito a registro.
  * @param id       Id do review.
  * @param text     Texto do review.
  * @param votes    Votos favoráveis.
  * @param version  Versão do app.
  * @param date     Data da postagem.
  */
-void Review::criaTrack(fstream &arq, char id[], char text[], int votes, char version[], char date[]){
+void Review::criaRegistro(fstream &arq, char id[], char text[], int votes, char version[], char date[]){
   try{
-    Track track;
+    Registro registro;
 
-    // Armazenando os valores passados como parâmetro nos campos da track.
-    strcpy(track.review_id, id);
-    strcpy(track.review_text, text);
-    track.upvotes = votes;
-    strcpy(track.app_version, version);
-    strcpy(track.posted_date, date);
+    // Armazenando os valores passados como parâmetro nos campos da registro.
+    strcpy(registro.review_id, id);
+    strcpy(registro.review_text, text);
+    registro.upvotes = votes;
+    strcpy(registro.app_version, version);
+    strcpy(registro.posted_date, date);
 
-    escreveTrack(arq, track);  // Chamada da função para escrever a track criada no arquvio binário.
+    escreveRegistro(arq, registro, text);  // Chamada da função para escrever a registro criada no arquvio binário.
   }
   catch(const exception& e){
-    cout << "ERRO: Algo deu errado ao criar a track." << endl;
+    cout << "ERRO: Algo deu errado ao criar a registro." << endl;
     cout << e.what() << '\n';
   }
 }
 
 /**
  * @brief  Função responsável por ler um trecho específico do arquivo binário
- *         e retornar o objeto do tipo Track correspondente.
+ *         e retornar o objeto do tipo registro correspondente.
  * 
  * @param arq     Arquivo binário para a leitura.
  * @param index   Índice do review a ser lido.
- * @return Track  Objeto a ser retornado. 
+ * @return registro  Objeto a ser retornado. 
  */
-Track Review::returnTrack(fstream &arq, int index){
-  Track track;
+Registro Review::returnRegistro(fstream &arq, int index){
+  Registro registro;
 
   // Se o arquivo não foi aberto, retorna Null.
   if(!arq.is_open()){
     cout << "ERRO! O arquivo não foi aberto corretamente." << endl;
-    return track;
+    return registro;
   }
-  // Caso contrário, leia o arquivo e retorna a track.
+  // Caso contrário, leia o arquivo e retorna a registro.
   else{
     arq.seekg(0);                              // Posicionando ponteiro no início do arquivo.
-    arq.seekg(index*sizeof(Track), ios::beg);  // Posicionando ponteiro no índice desejado.
+    arq.seekg(index*sizeof(Registro), ios::beg);  // Posicionando ponteiro no índice desejado.
 
-    arq.read(reinterpret_cast <char*>(&track), sizeof(Track));  // Leitura da track.
+    arq.read(reinterpret_cast <char*>(&registro), sizeof(Registro));  // Leitura da registro.
 
-    return track;
+    return registro;
   }
 }
