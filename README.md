@@ -37,31 +37,3 @@ Make clean
 ```
 ./TrabalhoED2.exe ./<repositório_do_arquivo>
 ```
-
-## Etapas do Projeto:
-
-### Etapa 1:
-
-```
-- Manipular adequadamente arquivos em modo texto.
-- Definir estruturas de dados para representar as entidades.
-- Gravar e manipular registros em arquivos binários.
-```
-
-### Etapa 2:
-
-```
-- Implelemntar os algorítimos de ordenação (HeapSort, QuickSort e SelectionSort).
-- Testar o desempenho dos algorítimos baseado na média de tempo, comparações e movimentações.
-- Implementar tabela hash para armazenar as versões do aplicativo para diferentes registros.
-```
-
-### Etapa 3:
-
-```
-```
-
-### Etapa 4:
-
-```
-```
